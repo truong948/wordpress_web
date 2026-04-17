@@ -1,0 +1,27 @@
+{
+  "name": "wordpress_web",
+  "version": "1.0.0",
+  "description": "[![WordPress](https://img.shields.io/badge/WordPress-6.5+-blue?logo=wordpress)](https://wordpress.org) [![WooCommerce](https://img.shields.io/badge/WooCommerce-8.x-purple?logo=woocommerce)](https://woocommerce.com) [![PHP](https://img.shields.io/badge/PHP-8.0+-777BB4?logo=php)](https://php.net) [![License: GPL v2](https://img.shields.io/badge/License-GPLv2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/truong948/wordpress_web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/truong948/wordpress_web/issues"
+  },
+  "homepage": "https://github.com/truong948/wordpress_web#readme",
+  "devDependencies": {
+    "jsdom": "^29.0.2"
+  }
+}
