@@ -209,8 +209,6 @@
             <ul>
                 <li><a onclick="navigate('home')" data-page="home">Trang Chủ</a></li>
                 <li><a onclick="navigate('shop')" data-page="shop">Cửa Hàng</a></li>
-                <li><a onclick="navigate('shop','Sofa')" data-page="shop">Sofa</a></li>
-                <li><a onclick="navigate('shop','Bàn')" data-page="shop">Bàn & Ghế</a></li>
                 <li><a onclick="navigate('about')" data-page="about">Giới Thiệu</a></li>
                 <li><a onclick="navigate('contact')" data-page="contact">Liên Hệ</a></li>
             </ul>
@@ -310,15 +308,72 @@ const products=[
 {id:30,name:"Gương Trang Trí Tròn Gold",cat:"Trang trí",price:1950000,origPrice:2300000,badge:"sale",img:uImg(IMGS.decor[1]),rating:4,reviews:18,desc:"Gương tròn viền kim loại mạ vàng, tạo điểm nhấn cho phòng khách/hành lang. Đường kính 80cm."}
 ];
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 12;
 let cart = [];
 let currentPage = 'home';
 let shopFilter = 'Tất cả';
+let shopKeyword = '';
+let shopMinPrice = null;
+let shopMaxPrice = null;
 let shopPage = 1;
 
 function fmt(n){return n.toLocaleString('vi-VN')+'₫';}
 function stars(r){let s='';for(let i=1;i<=5;i++){if(i<=Math.floor(r))s+='<i class="fas fa-star"></i>';else if(i-.5<=r)s+='<i class="fas fa-star-half-alt"></i>';else s+='<i class="far fa-star"></i>';}return s;}
 function getCategories(){return ['Tất cả',...new Set(products.map(p=>p.cat))];}
+
+function parsePriceValue(value){
+    if(value===null||value===undefined||value==='') return null;
+    const parsed=Number(value);
+    return Number.isFinite(parsed)?parsed:null;
+}
+
+function dedupeProductsById(list){
+    const seen=new Set();
+    return list.filter(p=>{
+        if(seen.has(p.id)) return false;
+        seen.add(p.id);
+        return true;
+    });
+}
+
+function getFilteredProducts(){
+    const normalizedKeyword=shopKeyword.trim().toLowerCase();
+    let filtered=products.filter(p=>{
+        const normalizedFilter=shopFilter.toLowerCase().trim();
+        const normalizedCategory=p.cat.toLowerCase().trim();
+        const categoryMatch=shopFilter==='Tất cả'||normalizedCategory===normalizedFilter||normalizedCategory.includes(normalizedFilter);
+        const keywordMatch=!normalizedKeyword||[p.name,p.cat,p.desc].join(' ').toLowerCase().includes(normalizedKeyword);
+        const minPriceMatch=shopMinPrice===null||p.price>=shopMinPrice;
+        const maxPriceMatch=shopMaxPrice===null||p.price<=shopMaxPrice;
+        return categoryMatch&&keywordMatch&&minPriceMatch&&maxPriceMatch;
+    });
+
+    return dedupeProductsById(filtered);
+}
+
+function getShopTotalPages(totalItems){
+    return Math.max(1,Math.ceil(totalItems/ITEMS_PER_PAGE));
+}
+
+function clampShopPage(totalPages){
+    if(shopPage<1) shopPage=1;
+    if(shopPage>totalPages) shopPage=totalPages;
+}
+
+function applyShopFilters(nextFilters={}){
+    if(Object.prototype.hasOwnProperty.call(nextFilters,'category')) shopFilter=nextFilters.category||'Tất cả';
+    if(Object.prototype.hasOwnProperty.call(nextFilters,'keyword')) shopKeyword=(nextFilters.keyword||'').trim();
+    if(Object.prototype.hasOwnProperty.call(nextFilters,'minPrice')) shopMinPrice=parsePriceValue(nextFilters.minPrice);
+    if(Object.prototype.hasOwnProperty.call(nextFilters,'maxPrice')) shopMaxPrice=parsePriceValue(nextFilters.maxPrice);
+    shopPage=1;
+    renderShop();
+}
+
+function goToShopPage(page){
+    shopPage=page;
+    renderShop();
+    window.scrollTo({top:300,behavior:'smooth'});
+}
 
 // ===================== ROUTER =====================
 function navigate(page, arg){
@@ -327,7 +382,7 @@ function navigate(page, arg){
     // Update nav
     document.querySelectorAll('.np-nav a').forEach(a=>{a.classList.remove('active');if(a.dataset.page===page)a.classList.add('active');});
     if(page==='home') renderHome();
-    else if(page==='shop'){shopFilter=arg||'Tất cả';shopPage=1;renderShop();}
+    else if(page==='shop'){shopFilter=arg||'Tất cả';shopKeyword='';shopMinPrice=null;shopMaxPrice=null;shopPage=1;renderShop();}
     else if(page==='product') renderProduct(arg);
     else if(page==='about') renderAbout();
     else if(page==='contact') renderContact();
@@ -359,23 +414,29 @@ function renderHome(){
 
 function renderShop(){
     const cats=getCategories();
-    const filtered=shopFilter==='Tất cả'?products:products.filter(p=>p.cat.includes(shopFilter));
-    const totalPages=Math.ceil(filtered.length/ITEMS_PER_PAGE);
-    const paged=filtered.slice((shopPage-1)*ITEMS_PER_PAGE,shopPage*ITEMS_PER_PAGE);
+    const filtered=getFilteredProducts();
+    const totalPages=getShopTotalPages(filtered.length);
+    clampShopPage(totalPages);
+    const startIndex=(shopPage-1)*ITEMS_PER_PAGE;
+    const paged=filtered.slice(startIndex,startIndex+ITEMS_PER_PAGE);
+    const totalPagesForDisplay=filtered.length?totalPages:1;
     let paginationHTML='';
     if(totalPages>1){
-        paginationHTML=`<div class="np-pagination"><button onclick="shopPage=1;renderShop()" ${shopPage===1?'disabled':''}><i class="fas fa-angle-double-left"></i></button><button onclick="shopPage=Math.max(1,shopPage-1);renderShop()" ${shopPage===1?'disabled':''}><i class="fas fa-angle-left"></i></button>`;
-        for(let i=1;i<=totalPages;i++) paginationHTML+=`<button onclick="shopPage=${i};renderShop();window.scrollTo({top:300,behavior:'smooth'})" class="${i===shopPage?'active':''}">${i}</button>`;
-        paginationHTML+=`<button onclick="shopPage=Math.min(${totalPages},shopPage+1);renderShop()" ${shopPage===totalPages?'disabled':''}><i class="fas fa-angle-right"></i></button><button onclick="shopPage=${totalPages};renderShop()" ${shopPage===totalPages?'disabled':''}><i class="fas fa-angle-double-right"></i></button></div>`;
+        paginationHTML=`<div class="np-pagination"><button onclick="goToShopPage(1)" ${shopPage===1?'disabled':''}><i class="fas fa-angle-double-left"></i></button><button onclick="goToShopPage(Math.max(1,shopPage-1))" ${shopPage===1?'disabled':''}><i class="fas fa-angle-left"></i></button>`;
+        for(let i=1;i<=totalPages;i++) paginationHTML+=`<button onclick="goToShopPage(${i})" class="${i===shopPage?'active':''}">${i}</button>`;
+        paginationHTML+=`<button onclick="goToShopPage(Math.min(${totalPages},shopPage+1))" ${shopPage===totalPages?'disabled':''}><i class="fas fa-angle-right"></i></button><button onclick="goToShopPage(${totalPages})" ${shopPage===totalPages?'disabled':''}><i class="fas fa-angle-double-right"></i></button></div>`;
     }
     document.getElementById('app').innerHTML=`
     <section class="np-page-header"><div class="np-container"><span class="np-section-subtitle">Cửa Hàng</span><h1>${shopFilter==='Tất cả'?'Tất Cả Sản Phẩm':shopFilter}</h1><p>Hiển thị ${filtered.length} sản phẩm</p></div></section>
     <section class="np-section" style="padding-top:3rem"><div class="np-container">
         <div class="np-breadcrumb"><a onclick="navigate('home')">Trang chủ</a><span class="sep"><i class="fas fa-chevron-right" style="font-size:.7em"></i></span><span>Cửa Hàng</span>${shopFilter!=='Tất cả'?`<span class="sep"><i class="fas fa-chevron-right" style="font-size:.7em"></i></span><span>${shopFilter}</span>`:''}</div>
-        <div class="np-shop-toolbar"><div class="np-filter-tabs">${cats.map(c=>`<button class="np-filter-tab ${c===shopFilter?'active':''}" onclick="shopFilter='${c}';shopPage=1;renderShop()">${c}</button>`).join('')}</div><div class="np-shop-count">Trang ${shopPage}/${totalPages} (${filtered.length} SP)</div></div>
-        <div class="np-products-grid">${paged.map(productCard).join('')}</div>
+        <div class="np-shop-toolbar"><div class="np-filter-tabs">${cats.map(c=>`<button class="np-filter-tab ${c===shopFilter?'active':''}" onclick='applyShopFilters({category:${JSON.stringify(c)}})'>${c}</button>`).join('')}</div><div class="np-shop-count">Trang ${shopPage}/${totalPagesForDisplay} (${filtered.length} SP)</div></div>
+        <div class="np-products-grid">${paged.length?paged.map(productCard).join(''):'<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--np-text-secondary)">Không tìm thấy sản phẩm phù hợp.</div>'}</div>
         ${paginationHTML}
     </div></section>`;
+
+    // Re-bind animation observer for newly rendered shop cards.
+    setTimeout(()=>{document.querySelectorAll('.np-animate:not(.visible)').forEach(el=>obs.observe(el));},50);
 }
 
 function renderProduct(id){
