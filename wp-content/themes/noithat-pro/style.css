@@ -1,0 +1,55 @@
+/*
+ Theme Name:   NoiThat Pro
+ Theme URI:    https://noithat-pro.example.com
+ Description:  Child theme tuy chinh cho website ban do noi that, dua tren Astra theme.
+ Author:       SV CNTT
+ Template:     astra
+ Version:      1.0.0
+ Text Domain:  noithat-pro
+*/
+
+/* === CSS VARIABLES === */
+:root {
+    --np-primary: #8B6914;
+    --np-primary-dark: #6B5010;
+    --np-accent: #D4A843;
+    --np-secondary: #2C2C2C;
+    --np-bg-main: #FAFAF8;
+    --np-bg-card: #FFFFFF;
+    --np-bg-dark: #1A1A1A;
+    --np-bg-section: #F5F0E8;
+    --np-text-primary: #1A1A1A;
+    --np-text-secondary: #6B6B6B;
+    --np-text-light: #999999;
+    --np-danger: #E53935;
+    --np-border: #E8E4DC;
+    --np-border-light: #F0ECE4;
+    --np-shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+    --np-shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+    --np-shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+    --np-shadow-hover: 0 12px 40px rgba(139,105,20,0.15);
+    --np-font-heading: 'Playfair Display', Georgia, serif;
+    --np-font-body: 'Inter', sans-serif;
+    --np-radius-sm: 6px;
+    --np-radius-md: 12px;
+    --np-radius-lg: 20px;
+    --np-radius-full: 50%;
+    --np-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    font-family: var(--np-font-body);
+    color: var(--np-text-primary);
+    background: var(--np-bg-main);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: var(--np-font-heading);
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+a { color: var(--np-primary); text-decoration: none; transition: var(--np-transition); }
+a:hover { color: var(--np-primary-dark); }

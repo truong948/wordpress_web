@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoiThat Pro - Nội Thất Cao Cấp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root{--np-primary:#8B6914;--np-primary-dark:#6B5010;--np-accent:#D4A843;--np-secondary:#2C2C2C;--np-bg-main:#FAFAF8;--np-bg-card:#FFFFFF;--np-bg-dark:#1A1A1A;--np-bg-section:#F5F0E8;--np-text-primary:#1A1A1A;--np-text-secondary:#6B6B6B;--np-text-light:#999;--np-danger:#E53935;--np-success:#4CAF50;--np-border:#E8E4DC;--np-border-light:#F0ECE4;--np-shadow-sm:0 2px 8px rgba(0,0,0,0.06);--np-shadow-md:0 4px 16px rgba(0,0,0,0.08);--np-shadow-lg:0 8px 32px rgba(0,0,0,0.12);--np-shadow-hover:0 12px 40px rgba(139,105,20,0.15);--np-font-heading:'Playfair Display',Georgia,serif;--np-font-body:'Inter',sans-serif;--np-radius-sm:6px;--np-radius-md:12px;--np-radius-lg:20px;--np-radius-full:50%;--np-transition:all .3s cubic-bezier(.4,0,.2,1)}
+        *{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--np-font-body);color:var(--np-text-primary);background:var(--np-bg-main);line-height:1.7;-webkit-font-smoothing:antialiased}h1,h2,h3,h4{font-family:var(--np-font-heading);font-weight:700;line-height:1.3}a{color:var(--np-primary);text-decoration:none;transition:var(--np-transition);cursor:pointer}a:hover{color:var(--np-primary-dark)}img{max-width:100%;height:auto}
+
+        /* HEADER */
+        .np-header{background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--np-border-light);position:sticky;top:0;z-index:1000;transition:var(--np-transition)}.np-header.scrolled{box-shadow:var(--np-shadow-sm)}.np-header-inner{max-width:1400px;margin:0 auto;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;height:80px}
+        .np-logo{display:flex;align-items:center;gap:12px;cursor:pointer}.np-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--np-primary),var(--np-accent));border-radius:var(--np-radius-sm);display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem}.np-logo-text{font-family:var(--np-font-heading);font-size:1.5rem;font-weight:700;color:var(--np-text-primary)}.np-logo-text span{color:var(--np-primary)}
+        .np-nav ul{display:flex;list-style:none;gap:2px}.np-nav a{display:block;padding:10px 18px;color:var(--np-text-secondary);font-weight:500;font-size:.95rem;border-radius:var(--np-radius-sm);transition:var(--np-transition);position:relative}.np-nav a::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:0;height:2px;background:var(--np-primary);transition:var(--np-transition)}.np-nav a:hover,.np-nav a.active{color:var(--np-primary);background:rgba(139,105,20,.06)}.np-nav a:hover::after,.np-nav a.active::after{width:24px}
+        .np-header-actions{display:flex;align-items:center;gap:8px}.np-header-btn{width:44px;height:44px;border-radius:var(--np-radius-full);border:1px solid var(--np-border);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--np-transition);color:var(--np-text-secondary);font-size:1.1rem;position:relative}.np-header-btn:hover{border-color:var(--np-primary);color:var(--np-primary)}.np-cart-count{position:absolute;top:-4px;right:-4px;width:20px;height:20px;background:var(--np-primary);color:white;border-radius:var(--np-radius-full);font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;transition:var(--np-transition)}
+        .np-menu-toggle{display:none;cursor:pointer;flex-direction:column;gap:5px;background:none;border:none}.np-menu-toggle span{width:24px;height:2px;background:var(--np-text-primary);border-radius:2px;transition:var(--np-transition)}
+
+        /* BUTTONS */
+        .np-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;border-radius:var(--np-radius-sm);font-family:var(--np-font-body);font-weight:600;font-size:.95rem;cursor:pointer;transition:var(--np-transition);border:2px solid transparent;text-decoration:none}
+        .np-btn-primary{background:linear-gradient(135deg,var(--np-primary),var(--np-accent));color:white}.np-btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(139,105,20,.35);color:white}
+        .np-btn-outline{background:transparent;color:white;border-color:rgba(255,255,255,.3)}.np-btn-outline:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.6);color:white}
+        .np-btn-dark{background:var(--np-secondary);color:white;border:none}.np-btn-dark:hover{background:#4A4A4A;transform:translateY(-2px);color:white}
+        .np-btn-sm{padding:10px 20px;font-size:.85rem}
+
+        /* SECTIONS */
+        .np-section{padding:6rem 0}.np-container{max-width:1400px;margin:0 auto;padding:0 2.5rem}.np-section-header{text-align:center;margin-bottom:4rem}
+        .np-section-subtitle{display:inline-block;font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--np-primary);margin-bottom:1rem}
+        .np-section-title{font-size:2.5rem;font-weight:700;margin-bottom:1rem}.np-section-desc{font-size:1.1rem;color:var(--np-text-secondary);max-width:600px;margin:0 auto}
+
+        /* HERO */
+        .np-hero{position:relative;min-height:85vh;display:flex;align-items:center;background:linear-gradient(135deg,#1A1A1A,#2C2C2C);overflow:hidden}
+        .np-hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1920&q=80') center/cover;opacity:.4;transition:transform 10s ease}.np-hero:hover .np-hero-bg{transform:scale(1.05)}
+        .np-hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(26,26,26,.85),rgba(26,26,26,.4))}
+        .np-hero-content{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:0 2.5rem;width:100%}
+        .np-hero-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;background:rgba(212,168,67,.15);border:1px solid rgba(212,168,67,.3);border-radius:50px;color:var(--np-accent);font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:1.5rem;animation:fadeInUp .8s ease}
+        .np-hero h1{font-size:3.5rem;font-weight:700;color:white;line-height:1.15;margin-bottom:1.5rem;max-width:700px;animation:fadeInUp .8s ease .2s both}.np-hero h1 span{color:var(--np-accent)}
+        .np-hero-desc{font-size:1.15rem;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:2.5rem;max-width:520px;animation:fadeInUp .8s ease .4s both}
+        .np-hero-buttons{display:flex;gap:16px;animation:fadeInUp .8s ease .6s both}
+        .np-hero-stats{display:flex;gap:2.5rem;margin-top:4rem;animation:fadeInUp .8s ease .8s both}
+        .np-hero-stat-number{font-family:var(--np-font-heading);font-size:2rem;font-weight:700;color:var(--np-accent)}.np-hero-stat-label{font-size:.85rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px}
+
+        /* CATEGORIES */
+        .np-categories{background:var(--np-bg-section)}.np-cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+        .np-cat-card{position:relative;border-radius:var(--np-radius-md);overflow:hidden;aspect-ratio:3/4;cursor:pointer}.np-cat-card img{width:100%;height:100%;object-fit:cover;transition:all .5s ease}.np-cat-card:hover img{transform:scale(1.08)}
+        .np-cat-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,26,26,.8),transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem;transition:var(--np-transition)}.np-cat-card:hover .np-cat-card-overlay{background:linear-gradient(to top,rgba(139,105,20,.85),transparent 60%)}
+        .np-cat-card-title{color:white;font-family:var(--np-font-heading);font-size:1.3rem;font-weight:700}.np-cat-card-count{color:rgba(255,255,255,.7);font-size:.85rem}
+
+        /* PRODUCTS */
+        .np-products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+        .np-product-card{background:var(--np-bg-card);border-radius:var(--np-radius-md);overflow:hidden;border:1px solid var(--np-border-light);transition:var(--np-transition)}.np-product-card:hover{transform:translateY(-6px);box-shadow:var(--np-shadow-hover);border-color:transparent}
+        .np-product-img-wrap{position:relative;aspect-ratio:1/1;overflow:hidden;background:var(--np-bg-section)}.np-product-img-wrap img{width:100%;height:100%;object-fit:cover;transition:all .5s ease}.np-product-card:hover .np-product-img-wrap img{transform:scale(1.06)}
+        .np-product-badge{position:absolute;top:12px;left:12px;padding:6px 14px;border-radius:50px;font-size:.75rem;font-weight:700;text-transform:uppercase;z-index:2}
+        .np-badge-sale{background:var(--np-danger);color:white}.np-badge-hot{background:#FF9800;color:white}.np-badge-new{background:var(--np-primary);color:white}
+        .np-product-actions{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;opacity:0;transform:translateX(10px);transition:var(--np-transition);z-index:2}
+        .np-product-card:hover .np-product-actions{opacity:1;transform:translateX(0)}
+        .np-product-action-btn{width:40px;height:40px;border-radius:var(--np-radius-full);background:white;border:none;box-shadow:var(--np-shadow-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--np-text-secondary);transition:var(--np-transition)}.np-product-action-btn:hover{background:var(--np-primary);color:white;transform:scale(1.1)}
+        .np-product-info{padding:1.5rem}.np-product-category{font-size:.8rem;color:var(--np-primary);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:6px}
+        .np-product-title{font-family:var(--np-font-heading);font-size:1.1rem;font-weight:600;margin-bottom:8px;line-height:1.4}.np-product-title a{color:inherit}.np-product-title a:hover{color:var(--np-primary)}
+        .np-product-price{display:flex;align-items:center;gap:10px;margin-bottom:12px}.np-price-current{font-size:1.2rem;font-weight:700;color:var(--np-primary)}.np-price-original{font-size:.9rem;color:var(--np-text-light);text-decoration:line-through}
+        .np-product-rating{display:flex;align-items:center;gap:6px}.np-rating-stars{display:flex;gap:2px;color:var(--np-accent);font-size:.85rem}.np-rating-count{font-size:.8rem;color:var(--np-text-light)}
+        .np-add-to-cart{width:100%;padding:12px;background:var(--np-bg-section);border:none;color:var(--np-text-primary);font-family:var(--np-font-body);font-size:.9rem;font-weight:600;cursor:pointer;transition:var(--np-transition);display:flex;align-items:center;justify-content:center;gap:8px}.np-add-to-cart:hover{background:var(--np-primary);color:white}
+
+        /* FEATURES */
+        .np-features{background:var(--np-bg-dark);color:white}.np-features .np-section-title{color:white}.np-features .np-section-desc{color:rgba(255,255,255,.6)}
+        .np-features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+        .np-feature-card{text-align:center;padding:2.5rem;border-radius:var(--np-radius-md);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);transition:var(--np-transition)}.np-feature-card:hover{background:rgba(255,255,255,.08);transform:translateY(-4px);border-color:rgba(212,168,67,.3)}
+        .np-feature-icon{width:72px;height:72px;margin:0 auto 1.5rem;background:linear-gradient(135deg,rgba(212,168,67,.15),rgba(139,105,20,.15));border-radius:var(--np-radius-md);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:var(--np-accent)}
+        .np-feature-title{font-family:var(--np-font-heading);font-size:1.15rem;font-weight:600;color:white;margin-bottom:8px}.np-feature-desc{font-size:.9rem;color:rgba(255,255,255,.5);line-height:1.6}
+
+        /* TESTIMONIALS */
+        .np-testimonials{background:var(--np-bg-section)}.np-testimonial-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+        .np-testimonial-card{background:white;padding:2.5rem;border-radius:var(--np-radius-md);border:1px solid var(--np-border-light);transition:var(--np-transition)}.np-testimonial-card:hover{box-shadow:var(--np-shadow-md);transform:translateY(-4px)}
+        .np-testimonial-stars{display:flex;gap:4px;color:var(--np-accent);margin-bottom:1rem}.np-testimonial-text{font-size:1rem;color:var(--np-text-secondary);line-height:1.7;margin-bottom:1.5rem;font-style:italic}
+        .np-testimonial-author{display:flex;align-items:center;gap:12px}.np-testimonial-avatar{width:48px;height:48px;border-radius:var(--np-radius-full);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:1.1rem}.np-testimonial-name{font-weight:600;font-size:.95rem}.np-testimonial-role{font-size:.8rem;color:var(--np-text-light)}
+
+        /* CTA */
+        .np-cta{background:linear-gradient(135deg,var(--np-primary),var(--np-primary-dark));padding:6rem 0;text-align:center;position:relative;overflow:hidden}
+        .np-cta::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.05),transparent 70%);animation:rotate 20s linear infinite}
+        .np-cta-title{font-size:2.5rem;color:white;margin-bottom:1rem;position:relative}.np-cta-desc{font-size:1.15rem;color:rgba(255,255,255,.8);margin-bottom:2.5rem;position:relative}
+
+        /* FOOTER */
+        .np-footer{background:var(--np-bg-dark);color:rgba(255,255,255,.7);padding-top:6rem}
+        .np-footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:4rem;padding-bottom:4rem;border-bottom:1px solid rgba(255,255,255,.08)}
+        .np-footer-brand-desc{font-size:.9rem;line-height:1.7;margin-bottom:1.5rem;color:rgba(255,255,255,.5)}
+        .np-footer-social{display:flex;gap:12px}.np-footer-social a{width:40px;height:40px;border-radius:var(--np-radius-full);background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);transition:var(--np-transition)}.np-footer-social a:hover{background:var(--np-primary);color:white;transform:translateY(-3px)}
+        .np-footer-title{font-family:var(--np-font-heading);font-size:1.1rem;font-weight:600;color:white;margin-bottom:1.5rem}
+        .np-footer-links{list-style:none}.np-footer-links li{margin-bottom:10px}.np-footer-links a{color:rgba(255,255,255,.5);font-size:.9rem;transition:var(--np-transition)}.np-footer-links a:hover{color:var(--np-accent);padding-left:6px}
+        .np-footer-contact-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;font-size:.9rem}.np-footer-contact-icon{color:var(--np-accent);margin-top:3px}
+        .np-footer-bottom{padding:1.5rem 0;display:flex;align-items:center;justify-content:space-between}.np-footer-copyright{font-size:.85rem;color:rgba(255,255,255,.4)}
+
+        .np-back-to-top{position:fixed;bottom:30px;right:30px;width:48px;height:48px;background:var(--np-primary);color:white;border:none;border-radius:var(--np-radius-full);cursor:pointer;display:none;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:var(--np-shadow-md);transition:var(--np-transition);z-index:999}.np-back-to-top.visible{display:flex}.np-back-to-top:hover{background:var(--np-primary-dark);transform:translateY(-3px)}
+
+        /* PAGE HEADER */
+        .np-page-header{background:var(--np-bg-section);padding:4rem 0;text-align:center}
+        .np-page-header h1{font-family:var(--np-font-heading);font-size:2.5rem;margin-bottom:1rem}
+        .np-page-header p{color:var(--np-text-secondary);max-width:600px;margin:0 auto}
+        .np-breadcrumb{padding:1rem 0;font-size:.9rem;color:var(--np-text-secondary)}.np-breadcrumb a{color:var(--np-text-secondary)}.np-breadcrumb a:hover{color:var(--np-primary)}.np-breadcrumb .sep{margin:0 8px;color:var(--np-text-light)}
+
+        /* PAGINATION */
+        .np-pagination{display:flex;justify-content:center;gap:8px;margin-top:3rem}
+        .np-pagination button{width:44px;height:44px;border-radius:var(--np-radius-sm);border:1px solid var(--np-border);background:white;font-family:var(--np-font-body);font-weight:600;font-size:.9rem;cursor:pointer;transition:var(--np-transition);display:flex;align-items:center;justify-content:center}
+        .np-pagination button:hover{border-color:var(--np-primary);color:var(--np-primary)}
+        .np-pagination button.active{background:var(--np-primary);color:white;border-color:var(--np-primary)}
+        .np-pagination button:disabled{opacity:.4;cursor:not-allowed}
+
+        /* SHOP FILTERS */
+        .np-shop-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+        .np-filter-tabs{display:flex;gap:8px;flex-wrap:wrap}
+        .np-filter-tab{padding:8px 20px;border-radius:50px;border:1px solid var(--np-border);background:white;font-family:var(--np-font-body);font-size:.85rem;font-weight:500;cursor:pointer;transition:var(--np-transition)}
+        .np-filter-tab:hover,.np-filter-tab.active{background:var(--np-primary);color:white;border-color:var(--np-primary)}
+        .np-shop-count{color:var(--np-text-secondary);font-size:.9rem}
+
+        /* PRODUCT DETAIL */
+        .np-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+        .np-detail-img{border-radius:var(--np-radius-lg);overflow:hidden;box-shadow:var(--np-shadow-md)}.np-detail-img img{width:100%;display:block}
+        .np-detail-cat{font-size:.85rem;color:var(--np-primary);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:8px}
+        .np-detail-title{font-size:2rem;margin-bottom:1rem}
+        .np-detail-price{display:flex;align-items:center;gap:14px;margin-bottom:1.5rem}
+        .np-detail-desc{color:var(--np-text-secondary);line-height:1.8;margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid var(--np-border-light)}
+        .np-detail-features li{padding:8px 0;border-bottom:1px solid var(--np-border-light);display:flex;align-items:center;gap:10px;color:var(--np-text-secondary)}.np-detail-features li i{color:var(--np-accent)}
+        .np-detail-actions{display:flex;gap:12px;margin-top:2rem}
+        .np-qty-wrap{display:flex;align-items:center;border:1px solid var(--np-border);border-radius:var(--np-radius-sm);overflow:hidden}
+        .np-qty-wrap button{width:44px;height:44px;border:none;background:var(--np-bg-section);cursor:pointer;font-size:1rem;transition:var(--np-transition)}.np-qty-wrap button:hover{background:var(--np-primary);color:white}
+        .np-qty-wrap span{width:50px;text-align:center;font-weight:600;font-size:1rem}
+
+        /* CART PAGE */
+        .np-cart-table{width:100%;border-collapse:collapse}
+        .np-cart-table th{text-align:left;padding:14px 16px;background:var(--np-bg-section);font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--np-text-secondary);border-bottom:2px solid var(--np-border)}
+        .np-cart-table td{padding:16px;border-bottom:1px solid var(--np-border-light);vertical-align:middle}
+        .np-cart-table .product-cell{display:flex;align-items:center;gap:16px}.np-cart-table .product-cell img{width:80px;height:80px;border-radius:var(--np-radius-sm);object-fit:cover}
+        .np-cart-summary{background:var(--np-bg-section);padding:2.5rem;border-radius:var(--np-radius-md);position:sticky;top:100px}
+
+        /* CONTACT */
+        .np-contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+        .np-contact-form-wrapper{background:white;padding:3rem;border-radius:var(--np-radius-md);border:1px solid var(--np-border-light);box-shadow:var(--np-shadow-sm)}
+        .np-form-input{width:100%;padding:14px 18px;border:1px solid var(--np-border);border-radius:var(--np-radius-sm);font-family:var(--np-font-body);font-size:.95rem;transition:var(--np-transition);margin-bottom:1rem;background:var(--np-bg-main)}
+        .np-form-input:focus{outline:none;border-color:var(--np-primary);box-shadow:0 0 0 3px rgba(139,105,20,.1)}
+        .np-contact-info-card{display:flex;align-items:flex-start;gap:16px;padding:1.5rem;background:var(--np-bg-section);border-radius:var(--np-radius-md);margin-bottom:1rem;transition:var(--np-transition)}.np-contact-info-card:hover{background:white;box-shadow:var(--np-shadow-sm)}
+        .np-contact-info-icon{width:48px;height:48px;background:linear-gradient(135deg,var(--np-primary),var(--np-accent));border-radius:var(--np-radius-sm);display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;flex-shrink:0}
+
+        /* ABOUT */
+        .np-about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+
+        /* SEARCH OVERLAY */
+        .np-search-overlay{position:fixed;inset:0;background:rgba(26,26,26,.85);backdrop-filter:blur(12px);z-index:2000;display:none;justify-content:center;align-items:flex-start;padding-top:12vh}.np-search-overlay.active{display:flex;animation:fadeIn .3s ease}
+        .np-search-box{width:90%;max-width:700px}
+        .np-search-input-wrap{display:flex;align-items:center;background:white;border-radius:var(--np-radius-md);padding:6px;box-shadow:var(--np-shadow-lg)}.np-search-input-wrap i{padding:0 18px;color:var(--np-text-light);font-size:1.2rem}.np-search-input-wrap input{flex:1;padding:16px 0;border:none;outline:none;font-size:1.1rem;font-family:var(--np-font-body);background:transparent}
+        .np-search-close{position:absolute;top:30px;right:40px;width:48px;height:48px;border-radius:var(--np-radius-full);background:rgba(255,255,255,.1);border:none;color:white;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--np-transition)}.np-search-close:hover{background:rgba(255,255,255,.2);transform:rotate(90deg)}
+        .np-search-results{margin-top:1.5rem;max-height:55vh;overflow-y:auto}
+        .np-search-result-item{display:flex;align-items:center;gap:16px;padding:14px 18px;background:rgba(255,255,255,.95);border-radius:var(--np-radius-sm);margin-bottom:8px;cursor:pointer;transition:var(--np-transition)}.np-search-result-item:hover{background:white;transform:translateX(6px);box-shadow:var(--np-shadow-sm)}
+        .np-search-result-item img{width:60px;height:60px;border-radius:var(--np-radius-sm);object-fit:cover}
+        .np-search-result-name{font-weight:600;font-size:.95rem;margin-bottom:2px}.np-search-result-price{color:var(--np-primary);font-weight:700;font-size:.9rem}
+        .np-search-hint{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:1rem;text-align:center}
+
+        /* MINI CART DRAWER */
+        .np-cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1999;display:none}.np-cart-overlay.active{display:block;animation:fadeIn .3s ease}
+        .np-cart-drawer{position:fixed;top:0;right:-450px;width:420px;max-width:90vw;height:100vh;background:white;z-index:2000;transition:right .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 30px rgba(0,0,0,.15)}.np-cart-drawer.active{right:0}
+        .np-cart-drawer-header{padding:1.5rem 2rem;border-bottom:1px solid var(--np-border-light);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+        .np-cart-drawer-title{font-family:var(--np-font-heading);font-size:1.3rem;font-weight:700}
+        .np-cart-drawer-close{width:40px;height:40px;border-radius:var(--np-radius-full);border:1px solid var(--np-border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--np-transition)}.np-cart-drawer-close:hover{border-color:var(--np-danger);color:var(--np-danger)}
+        .np-cart-drawer-items{flex:1;overflow-y:auto;padding:1rem 2rem}
+        .np-cart-item{display:flex;gap:14px;padding:1rem 0;border-bottom:1px solid var(--np-border-light)}.np-cart-item img{width:80px;height:80px;border-radius:var(--np-radius-sm);object-fit:cover;background:var(--np-bg-section)}
+        .np-cart-item-info{flex:1;display:flex;flex-direction:column;justify-content:center}.np-cart-item-name{font-weight:600;font-size:.9rem;margin-bottom:4px;line-height:1.3}.np-cart-item-price{color:var(--np-primary);font-weight:700;font-size:.9rem}
+        .np-cart-item-qty{display:flex;align-items:center;gap:8px;margin-top:8px}
+        .np-qty-btn{width:28px;height:28px;border-radius:var(--np-radius-sm);border:1px solid var(--np-border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:var(--np-transition)}.np-qty-btn:hover{border-color:var(--np-primary);color:var(--np-primary)}
+        .np-qty-value{font-weight:600;font-size:.9rem;min-width:24px;text-align:center}
+        .np-cart-item-remove{margin-left:auto;width:32px;height:32px;border-radius:var(--np-radius-full);border:none;background:transparent;color:var(--np-text-light);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--np-transition);align-self:center}.np-cart-item-remove:hover{background:rgba(229,57,53,.1);color:var(--np-danger)}
+        .np-cart-empty{text-align:center;padding:4rem 2rem;color:var(--np-text-light)}.np-cart-empty i{font-size:3.5rem;margin-bottom:1rem;display:block}
+        .np-cart-drawer-footer{padding:1.5rem 2rem;border-top:1px solid var(--np-border-light);background:var(--np-bg-section);flex-shrink:0}
+        .np-cart-subtotal{display:flex;justify-content:space-between;font-size:1rem;margin-bottom:1rem}.np-cart-subtotal-value{font-family:var(--np-font-heading);font-size:1.3rem;font-weight:700;color:var(--np-primary)}
+        .np-cart-checkout-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--np-primary),var(--np-accent));color:white;border:none;border-radius:var(--np-radius-sm);font-family:var(--np-font-body);font-size:1rem;font-weight:700;cursor:pointer;transition:var(--np-transition);display:flex;align-items:center;justify-content:center;gap:10px}.np-cart-checkout-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(139,105,20,.3)}
+        .np-cart-continue{width:100%;padding:12px;background:transparent;border:1px solid var(--np-border);border-radius:var(--np-radius-sm);font-family:var(--np-font-body);font-size:.9rem;font-weight:600;cursor:pointer;margin-top:8px;transition:var(--np-transition)}.np-cart-continue:hover{border-color:var(--np-primary);color:var(--np-primary)}
+
+        /* CHECKOUT */
+        .np-checkout-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:3rem}
+        .np-checkout-summary{background:var(--np-bg-section);padding:2rem;border-radius:var(--np-radius-md);position:sticky;top:100px}
+        .np-form-label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px;color:var(--np-text-secondary)}.np-form-group{margin-bottom:1.2rem}
+        .np-form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+        .np-checkout-item{display:flex;gap:12px;margin-bottom:1rem;font-size:.9rem}.np-checkout-item img{width:50px;height:50px;border-radius:var(--np-radius-sm);object-fit:cover}
+        .np-checkout-totals{margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--np-border)}
+        .np-checkout-total-row{display:flex;justify-content:space-between;margin-bottom:8px;font-size:.9rem}
+        .np-checkout-total-row.grand{font-size:1.1rem;font-weight:700;color:var(--np-primary);padding-top:8px;border-top:2px solid var(--np-primary);margin-top:8px}
+        .np-payment-methods{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+        .np-payment-method{padding:10px 18px;border:1px solid var(--np-border);border-radius:var(--np-radius-sm);cursor:pointer;transition:var(--np-transition);font-size:.85rem;display:flex;align-items:center;gap:8px}.np-payment-method:hover,.np-payment-method.selected{border-color:var(--np-primary);background:rgba(139,105,20,.05)}.np-payment-method.selected{box-shadow:0 0 0 2px var(--np-primary)}
+
+        /* TOAST */
+        .np-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--np-bg-dark);color:white;padding:14px 28px;border-radius:var(--np-radius-md);font-size:.9rem;font-weight:500;z-index:9999;display:flex;align-items:center;gap:10px;box-shadow:var(--np-shadow-lg);transition:transform .4s cubic-bezier(.4,0,.2,1)}.np-toast.show{transform:translateX(-50%) translateY(0)}.np-toast i{color:var(--np-accent)}
+
+        /* ANIMATIONS */
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        .np-animate{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}.np-animate.visible{opacity:1;transform:translateY(0)}
+
+        /* RESPONSIVE */
+        @media(max-width:1024px){.np-hero h1{font-size:2.8rem}.np-cat-grid,.np-features-grid{grid-template-columns:repeat(2,1fr)}.np-products-grid{grid-template-columns:repeat(3,1fr)}.np-footer-grid{grid-template-columns:repeat(2,1fr)}.np-detail-grid,.np-checkout-grid{grid-template-columns:1fr}}
+        @media(max-width:768px){.np-header-inner{height:64px}.np-nav{display:none;position:absolute;top:100%;left:0;right:0;background:white;box-shadow:var(--np-shadow-md);padding:1rem;z-index:100}.np-nav.active{display:block}.np-nav ul{flex-direction:column}.np-menu-toggle{display:flex}.np-hero{min-height:70vh}.np-hero h1{font-size:2.2rem}.np-hero-buttons{flex-direction:column}.np-cat-grid{grid-template-columns:1fr 1fr}.np-products-grid{grid-template-columns:repeat(2,1fr)}.np-features-grid,.np-testimonial-grid{grid-template-columns:1fr}.np-footer-grid{grid-template-columns:1fr;gap:2.5rem}.np-footer-bottom{flex-direction:column;gap:1rem;text-align:center}.np-section-title{font-size:2rem}.np-about-grid,.np-contact-grid{grid-template-columns:1fr}.np-form-row{grid-template-columns:1fr}}
+        @media(max-width:480px){.np-products-grid,.np-cat-grid{grid-template-columns:1fr}.np-hero h1{font-size:1.8rem}}
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="np-header" id="np-header">
+    <div class="np-header-inner">
+        <a class="np-logo" onclick="navigate('home')"><div class="np-logo-icon"><i class="fas fa-couch"></i></div><div class="np-logo-text">Nội Thất <span>Pro</span></div></a>
+        <nav class="np-nav" id="np-main-nav">
+            <ul>
+                <li><a onclick="navigate('home')" data-page="home">Trang Chủ</a></li>
+                <li><a onclick="navigate('shop')" data-page="shop">Cửa Hàng</a></li>
+                <li><a onclick="navigate('shop','Sofa')" data-page="shop">Sofa</a></li>
+                <li><a onclick="navigate('shop','Bàn')" data-page="shop">Bàn & Ghế</a></li>
+                <li><a onclick="navigate('about')" data-page="about">Giới Thiệu</a></li>
+                <li><a onclick="navigate('contact')" data-page="contact">Liên Hệ</a></li>
+            </ul>
+        </nav>
+        <div class="np-header-actions">
+            <button class="np-header-btn" onclick="openSearch()"><i class="fas fa-search"></i></button>
+            <button class="np-header-btn" onclick="openCart()"><i class="fas fa-shopping-bag"></i><span class="np-cart-count" id="cart-count">0</span></button>
+            <button class="np-menu-toggle" id="np-menu-toggle"><span></span><span></span><span></span></button>
+        </div>
+    </div>
+</header>
+
+<!-- SEARCH OVERLAY -->
+<div class="np-search-overlay" id="search-overlay">
+    <button class="np-search-close" onclick="closeSearch()"><i class="fas fa-times"></i></button>
+    <div class="np-search-box">
+        <div class="np-search-input-wrap"><i class="fas fa-search"></i><input type="text" id="search-input" placeholder="Tìm kiếm sản phẩm..." oninput="handleSearch(this.value)" autocomplete="off"></div>
+        <div class="np-search-results" id="search-results"></div>
+        <p class="np-search-hint" id="search-hint">Nhập từ khóa để tìm kiếm (VD: sofa, bàn, ghế, tủ...)</p>
+    </div>
+</div>
+
+<!-- MINI CART DRAWER -->
+<div class="np-cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="np-cart-drawer" id="cart-drawer">
+    <div class="np-cart-drawer-header"><div class="np-cart-drawer-title"><i class="fas fa-shopping-bag" style="color:var(--np-primary);margin-right:8px"></i>Giỏ Hàng (<span id="cart-total-items">0</span>)</div><button class="np-cart-drawer-close" onclick="closeCart()"><i class="fas fa-times"></i></button></div>
+    <div class="np-cart-drawer-items" id="cart-items"></div>
+    <div class="np-cart-drawer-footer" id="cart-footer" style="display:none">
+        <div class="np-cart-subtotal"><span>Tạm tính:</span><span class="np-cart-subtotal-value" id="cart-subtotal">0₫</span></div>
+        <button class="np-cart-checkout-btn" onclick="closeCart();navigate('checkout')"><i class="fas fa-credit-card"></i> Thanh Toán</button>
+        <button class="np-cart-continue" onclick="closeCart()"><i class="fas fa-arrow-left"></i> Tiếp tục mua sắm</button>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="np-toast" id="np-toast"><i class="fas fa-check-circle"></i><span id="toast-msg"></span></div>
+
+<!-- MAIN PAGE CONTAINER -->
+<div id="app"></div>
+
+<!-- FOOTER -->
+<footer class="np-footer" id="np-footer">
+    <div class="np-container">
+        <div class="np-footer-grid">
+            <div><a class="np-logo" style="margin-bottom:1.5rem;display:inline-flex" onclick="navigate('home')"><div class="np-logo-icon"><i class="fas fa-couch"></i></div><div class="np-logo-text">Nội Thất <span>Pro</span></div></a><p class="np-footer-brand-desc">Chuyên cung cấp nội thất cao cấp, hiện đại cho mọi không gian sống. Với hơn 10 năm kinh nghiệm.</p><div class="np-footer-social"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-youtube"></i></a><a href="#"><i class="fab fa-tiktok"></i></a></div></div>
+            <div><h4 class="np-footer-title">Danh Mục</h4><ul class="np-footer-links"><li><a onclick="navigate('shop','Sofa')">Sofa & Ghế Sofa</a></li><li><a onclick="navigate('shop','Bàn')">Bàn Ăn & Làm Việc</a></li><li><a onclick="navigate('shop','Ghế')">Ghế Ăn & Văn Phòng</a></li><li><a onclick="navigate('shop','Tủ')">Tủ & Kệ Trang Trí</a></li><li><a onclick="navigate('shop','Giường')">Giường & Nệm</a></li></ul></div>
+            <div><h4 class="np-footer-title">Hỗ Trợ</h4><ul class="np-footer-links"><li><a onclick="navigate('about')">Về chúng tôi</a></li><li><a onclick="navigate('contact')">Liên hệ</a></li><li><a href="#">Chính sách giao hàng</a></li><li><a href="#">Chính sách đổi trả</a></li></ul></div>
+            <div><h4 class="np-footer-title">Liên Hệ</h4><div class="np-footer-contact-item"><span class="np-footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span><span>123 Nguyễn Huệ, Q.1, TP.HCM</span></div><div class="np-footer-contact-item"><span class="np-footer-contact-icon"><i class="fas fa-phone-alt"></i></span><span>0987 654 321</span></div><div class="np-footer-contact-item"><span class="np-footer-contact-icon"><i class="fas fa-envelope"></i></span><span>info@noithatpro.vn</span></div></div>
+        </div>
+        <div class="np-footer-bottom"><p class="np-footer-copyright">&copy; 2024 <strong>NoiThat Pro</strong>. SV CNTT.</p><div style="display:flex;gap:20px;font-size:.85rem"><a href="#" style="color:rgba(255,255,255,.5)">Điều khoản</a><a href="#" style="color:rgba(255,255,255,.5)">Bảo mật</a></div></div>
+    </div>
+</footer>
+<button class="np-back-to-top" id="np-back-to-top"><i class="fas fa-chevron-up"></i></button>
+
+<script>
+// ===================== PRODUCT DATA (30 products) =====================
+const IMGS = {
+    sofa:['photo-1555041469-a586c61ea9bc','photo-1567538096630-e0c55bd6374c','photo-1598300042247-d088f8ab3a91','photo-1493663284031-b7e3aefcae8e','photo-1558618666-fcd25c85f82e'],
+    ban:['photo-1611269154421-4e27233ac5c7','photo-1518455027359-f3f8164ba6bd','photo-1616627547584-bf28cee262db','photo-1595515106969-1ce29566ff1c'],
+    ghe:['photo-1503602642458-232111445657','photo-1580480055273-228ff5388ef8','photo-1519947486511-46149fa0a254','photo-1592078615290-033ee584e267'],
+    tu:['photo-1595428774223-ef52624120d2','photo-1615874959474-d609969a20ed','photo-1594026112284-02bb6f3352fe'],
+    giuong:['photo-1505693314120-0d443867891c','photo-1522771739844-6a9f6d5f14af','photo-1540518614846-7eded433c457'],
+    decor:['photo-1513506003901-1e6a229e2d15','photo-1507003211169-0a1dd7228f2d']
+};
+function uImg(id,s=600){return `https://images.unsplash.com/${id}?w=${s}&h=${s}&fit=crop`;}
+
+const products=[ 
+{id:1,name:"Sofa Chữ L Nordic Premium",cat:"Sofa",price:15900000,origPrice:18500000,badge:"sale",img:uImg(IMGS.sofa[0]),rating:5,reviews:24,desc:"Sofa góc chữ L thiết kế Bắc Âu. Khung gỗ sồi tự nhiên, đệm mút D40 cao cấp, bọc vải microfiber chống thấm. Kích thước 280x170x85cm."},
+{id:2,name:"Sofa 3 Chỗ Milano Velvet",cat:"Sofa",price:12500000,origPrice:14900000,badge:"hot",img:uImg(IMGS.sofa[1]),rating:4.5,reviews:18,desc:"Sofa 3 chỗ phong cách Ý, bọc nhung velvet cao cấp nhập khẩu. Đệm 3 lớp siêu êm, khung thép không gỉ. Kích thước 220x90x80cm."},
+{id:3,name:"Ghế Sofa Đơn Accent Chair",cat:"Sofa",price:5900000,origPrice:null,badge:"new",img:uImg(IMGS.sofa[2]),rating:4.5,reviews:9,desc:"Ghế sofa đơn thiết kế hiện đại, bọc vải bố canvas cao cấp, khung gỗ tràm tự nhiên. Kích thước 75x80x90cm."},
+{id:4,name:"Sofa Băng Vintage Green",cat:"Sofa",price:9800000,origPrice:12000000,badge:"sale",img:uImg(IMGS.sofa[3]),rating:4,reviews:15,desc:"Sofa băng phong cách vintage với tông xanh rêu thanh lịch. Đệm cao su non, chân gỗ sồi. Kích thước 200x85x78cm."},
+{id:5,name:"Sofa Góc Modular 5 Chỗ",cat:"Sofa",price:24900000,origPrice:null,badge:"hot",img:uImg(IMGS.sofa[4]),rating:5,reviews:7,desc:"Sofa modular linh hoạt, có thể tùy chỉnh cấu hình. Vải chống thấm, khung thép chịu lực. Kích thước tổng 350x200x80cm."},
+{id:6,name:"Bàn Ăn Gỗ Sồi 6 Chỗ Osaka",cat:"Bàn",price:11900000,origPrice:13500000,badge:"sale",img:uImg(IMGS.ban[0]),rating:5,reviews:31,desc:"Mặt gỗ sồi nguyên tấm dày 4cm, chân sắt sơn tĩnh điện. Phủ sơn PU 5 lớp chống trầy. Kích thước 180x90x75cm."},
+{id:7,name:"Bàn Làm Việc Standing Desk",cat:"Bàn",price:8900000,origPrice:null,badge:"new",img:uImg(IMGS.ban[1]),rating:5,reviews:15,desc:"Bàn đứng/ngồi điều chỉnh độ cao 72-120cm bằng motor điện. Mặt MDF chống ẩm, chịu tải 80kg. Kích thước 140x70cm."},
+{id:8,name:"Bàn Trà Gỗ Tự Nhiên Zen",cat:"Bàn",price:4200000,origPrice:5000000,badge:"sale",img:uImg(IMGS.ban[2]),rating:4,reviews:22,desc:"Bàn trà phong cách Zen, mặt gỗ tràm nguyên tấm, chân kim loại sơn đen. Kích thước 120x60x45cm."},
+{id:9,name:"Bàn Console Gỗ Óc Chó",cat:"Bàn",price:7500000,origPrice:null,badge:"new",img:uImg(IMGS.ban[3]),rating:4.5,reviews:8,desc:"Bàn console thanh lịch, gỗ óc chó nhập khẩu Bắc Mỹ. Thiết kế tối giản, 2 ngăn kéo ẩn. Kích thước 120x35x80cm."},
+{id:10,name:"Ghế Ăn Gỗ Tự Nhiên Hana",cat:"Ghế",price:1290000,origPrice:1590000,badge:"sale",img:uImg(IMGS.ghe[0]),rating:4,reviews:22,desc:"Gỗ tràm tự nhiên, tựa lưng cong ergonomic, mặt ngồi bọc đệm vải. Chịu tải 120kg. Kích thước 45x50x82cm."},
+{id:11,name:"Ghế Văn Phòng Ergonomic Mesh",cat:"Ghế",price:4500000,origPrice:null,badge:"new",img:uImg(IMGS.ghe[1]),rating:4.5,reviews:14,desc:"Lưng lưới mesh thoáng khí, tựa đầu và tay vịn 3D điều chỉnh, ngả 135 độ. Chân nhôm đúc 5 cánh."},
+{id:12,name:"Ghế Bar Chân Cao Industrial",cat:"Ghế",price:1890000,origPrice:2200000,badge:"sale",img:uImg(IMGS.ghe[2]),rating:4,reviews:11,desc:"Ghế bar phong cách công nghiệp, khung sắt sơn tĩnh điện, mặt ngồi gỗ thông. Chiều cao 75cm."},
+{id:13,name:"Ghế Bành Thư Giãn Rocking",cat:"Ghế",price:6500000,origPrice:null,badge:"hot",img:uImg(IMGS.ghe[3]),rating:5,reviews:6,desc:"Ghế bành bập bênh thư giãn, bọc vải linen cao cấp, khung gỗ sồi. Hoàn hảo cho góc đọc sách."},
+{id:14,name:"Tủ Sách 5 Tầng Minimalist Oak",cat:"Tủ & Kệ",price:3900000,origPrice:4500000,badge:"sale",img:uImg(IMGS.tu[0]),rating:4,reviews:12,desc:"Gỗ MDF lõi xanh chống ẩm, phủ veneer sồi tự nhiên. 5 tầng rộng rãi, chịu tải mỗi tầng 20kg. Kích thước 80x35x180cm."},
+{id:15,name:"Kệ Tivi Gỗ Cao Su Rustic 1m8",cat:"Tủ & Kệ",price:6500000,origPrice:null,badge:"",img:uImg(IMGS.tu[1]),rating:4,reviews:7,desc:"Gỗ cao su 100%, 2 ngăn kéo + 2 cánh tủ + ô trống. Chịu tải TV đến 65 inch. Kích thước 180x40x55cm."},
+{id:16,name:"Tủ Quần Áo 3 Cánh Sliding",cat:"Tủ & Kệ",price:14500000,origPrice:16900000,badge:"sale",img:uImg(IMGS.tu[2]),rating:4.5,reviews:9,desc:"Tủ quần áo cánh trượt hiện đại, gỗ MDF phủ melamine, ray trượt giảm chấn. Kích thước 180x60x220cm."},
+{id:17,name:"Giường King Size Premium Walnut",cat:"Giường",price:22900000,origPrice:25900000,badge:"hot",img:uImg(IMGS.giuong[0]),rating:5,reviews:8,desc:"Khung gỗ óc chó nhập khẩu Bắc Mỹ, đầu giường bọc da microfiber. Hệ thống nâng hydraulic. Kích thước 200x180x110cm."},
+{id:18,name:"Giường Đôi 1m6 Scandinavian",cat:"Giường",price:12900000,origPrice:null,badge:"new",img:uImg(IMGS.giuong[1]),rating:4.5,reviews:13,desc:"Thiết kế thanh lịch phong cách Bắc Âu, gỗ sồi tự nhiên, có 2 hộc kéo. Kích thước 200x160x95cm."},
+{id:19,name:"Giường Tầng Trẻ Em Cozy",cat:"Giường",price:8500000,origPrice:9900000,badge:"sale",img:uImg(IMGS.giuong[2]),rating:4,reviews:16,desc:"Giường 2 tầng an toàn cho trẻ, gỗ thông nhập khẩu, sơn PU an toàn. Kích thước 200x100x175cm."},
+{id:20,name:"Sofa Bed 2in1 Convertible",cat:"Sofa",price:8900000,origPrice:10500000,badge:"sale",img:uImg(IMGS.sofa[0]),rating:4,reviews:19,desc:"Sofa kiêm giường ngủ, cơ chế gập thông minh, đệm mút cao su non. Kích thước sofa 200x90cm, giường 200x140cm."},
+{id:21,name:"Bàn Ăn Tròn Marble 4 Chỗ",cat:"Bàn",price:9500000,origPrice:null,badge:"new",img:uImg(IMGS.ban[0]),rating:5,reviews:10,desc:"Mặt đá marble nhân tạo, chân sắt sơn vàng đồng. Đường kính 120cm, cao 75cm."},
+{id:22,name:"Bàn Trang Điểm Vanity White",cat:"Bàn",price:5200000,origPrice:6000000,badge:"sale",img:uImg(IMGS.ban[2]),rating:4.5,reviews:17,desc:"Bàn trang điểm có gương LED, 5 ngăn kéo, mặt bàn phủ kính cường lực. Kích thước 100x45x135cm."},
+{id:23,name:"Ghế Ăn Sắt Mặt Nệm Lily",cat:"Ghế",price:890000,origPrice:1100000,badge:"sale",img:uImg(IMGS.ghe[0]),rating:3.5,reviews:28,desc:"Khung sắt sơn tĩnh điện, mặt ngồi bọc nệm PVC, giá rẻ cho quán ăn/café. Chịu tải 120kg."},
+{id:24,name:"Kệ Treo Tường Hexagon Set 3",cat:"Tủ & Kệ",price:1200000,origPrice:null,badge:"new",img:uImg(IMGS.tu[0]),rating:4,reviews:20,desc:"Bộ 3 kệ hình lục giác treo tường trang trí, gỗ MDF phủ melamine, dễ lắp đặt."},
+{id:25,name:"Táp Đầu Giường Ngăn Kéo",cat:"Tủ & Kệ",price:2100000,origPrice:2500000,badge:"sale",img:uImg(IMGS.tu[1]),rating:4,reviews:14,desc:"Táp đầu giường 2 ngăn kéo ray trượt giảm chấn, chân gỗ sồi. Kích thước 45x40x55cm."},
+{id:26,name:"Ghế Xoay Gaming Pro RGB",cat:"Ghế",price:5900000,origPrice:7500000,badge:"sale",img:uImg(IMGS.ghe[1]),rating:4.5,reviews:23,desc:"Ghế gaming cao cấp, tựa lưng 180 độ, tay vịn 4D, đệm memory foam, đèn LED RGB tích hợp."},
+{id:27,name:"Bàn Café Tròn Chân Sắt",cat:"Bàn",price:1500000,origPrice:null,badge:"",img:uImg(IMGS.ban[3]),rating:4,reviews:30,desc:"Bàn café nhỏ gọn, mặt gỗ MDF phủ melamine, chân sắt sơn đen. Đường kính 60cm, cao 73cm."},
+{id:28,name:"Giường Gấp Thông Minh 1m2",cat:"Giường",price:6900000,origPrice:8200000,badge:"sale",img:uImg(IMGS.giuong[1]),rating:4,reviews:11,desc:"Giường gấp dọc tiết kiệm không gian, khung thép chịu lực, nệm mút D40. Khi gấp thành tủ sách."},
+{id:29,name:"Đèn Sàn Đọc Sách Arc",cat:"Trang trí",price:2800000,origPrice:null,badge:"new",img:uImg(IMGS.decor[0]),rating:4.5,reviews:9,desc:"Đèn sàn cong phong cách mid-century, chao đèn vải lanh, chân đá marble. Chiều cao 170cm."},
+{id:30,name:"Gương Trang Trí Tròn Gold",cat:"Trang trí",price:1950000,origPrice:2300000,badge:"sale",img:uImg(IMGS.decor[1]),rating:4,reviews:18,desc:"Gương tròn viền kim loại mạ vàng, tạo điểm nhấn cho phòng khách/hành lang. Đường kính 80cm."}
+];
+
+const ITEMS_PER_PAGE = 8;
+let cart = [];
+let currentPage = 'home';
+let shopFilter = 'Tất cả';
+let shopPage = 1;
+
+function fmt(n){return n.toLocaleString('vi-VN')+'₫';}
+function stars(r){let s='';for(let i=1;i<=5;i++){if(i<=Math.floor(r))s+='<i class="fas fa-star"></i>';else if(i-.5<=r)s+='<i class="fas fa-star-half-alt"></i>';else s+='<i class="far fa-star"></i>';}return s;}
+function getCategories(){return ['Tất cả',...new Set(products.map(p=>p.cat))];}
+
+// ===================== ROUTER =====================
+function navigate(page, arg){
+    currentPage = page;
+    window.scrollTo({top:0,behavior:'instant'});
+    // Update nav
+    document.querySelectorAll('.np-nav a').forEach(a=>{a.classList.remove('active');if(a.dataset.page===page)a.classList.add('active');});
+    if(page==='home') renderHome();
+    else if(page==='shop'){shopFilter=arg||'Tất cả';shopPage=1;renderShop();}
+    else if(page==='product') renderProduct(arg);
+    else if(page==='about') renderAbout();
+    else if(page==='contact') renderContact();
+    else if(page==='cart') renderCartPage();
+    else if(page==='checkout') renderCheckout();
+    // Re-animate
+    setTimeout(()=>{document.querySelectorAll('.np-animate:not(.visible)').forEach(el=>obs.observe(el));},50);
+}
+
+function productCard(p){
+    const bc=p.badge==='sale'?'np-badge-sale':p.badge==='hot'?'np-badge-hot':p.badge==='new'?'np-badge-new':'';
+    const bt=p.badge==='sale'?'Giảm giá':p.badge==='hot'?'Nổi bật':p.badge==='new'?'Mới':'';
+    return `<div class="np-product-card np-animate"><div class="np-product-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy">${bt?`<span class="np-product-badge ${bc}">${bt}</span>`:''}<div class="np-product-actions"><button class="np-product-action-btn" onclick="event.stopPropagation();addToCart(${p.id})" title="Thêm giỏ"><i class="fas fa-shopping-cart"></i></button><button class="np-product-action-btn" onclick="event.stopPropagation();navigate('product',${p.id})" title="Xem"><i class="fas fa-eye"></i></button></div></div><div class="np-product-info" onclick="navigate('product',${p.id})" style="cursor:pointer"><div class="np-product-category">${p.cat}</div><h3 class="np-product-title">${p.name}</h3><div class="np-product-price">${p.origPrice?`<span class="np-price-original">${fmt(p.origPrice)}</span>`:''}<span class="np-price-current">${fmt(p.price)}</span></div><div class="np-product-rating"><div class="np-rating-stars">${stars(p.rating)}</div><span class="np-rating-count">(${p.reviews})</span></div></div><button class="np-add-to-cart" onclick="addToCart(${p.id})"><i class="fas fa-shopping-cart"></i> Thêm vào giỏ</button></div>`;
+}
+
+// ===================== PAGES =====================
+function renderHome(){
+    const featured=products.filter((_,i)=>i<4);
+    const newP=products.filter((_,i)=>i>=4&&i<12);
+    document.getElementById('app').innerHTML=`
+    <section class="np-hero"><div class="np-hero-bg"></div><div class="np-hero-overlay"></div><div class="np-hero-content"><div class="np-hero-badge"><i class="fas fa-star"></i> Bộ Sưu Tập 2024</div><h1>Nâng Tầm <span>Không Gian Sống</span> Của Bạn</h1><p class="np-hero-desc">Khám phá bộ sưu tập nội thất cao cấp được thiết kế tinh tế, kết hợp hoàn hảo giữa thẩm mỹ và công năng.</p><div class="np-hero-buttons"><a onclick="navigate('shop')" class="np-btn np-btn-primary">Khám Phá Ngay <i class="fas fa-arrow-right"></i></a><a onclick="navigate('about')" class="np-btn np-btn-outline"><i class="fas fa-play-circle"></i> Về Chúng Tôi</a></div><div class="np-hero-stats"><div><div class="np-hero-stat-number">500+</div><div class="np-hero-stat-label">Sản Phẩm</div></div><div><div class="np-hero-stat-number">10,000+</div><div class="np-hero-stat-label">Khách Hàng</div></div><div><div class="np-hero-stat-number">15+</div><div class="np-hero-stat-label">Năm Kinh Nghiệm</div></div></div></div></section>
+    <section class="np-section np-categories"><div class="np-container"><div class="np-section-header"><span class="np-section-subtitle">Bộ Sưu Tập</span><h2 class="np-section-title">Danh Mục Nội Thất</h2><p class="np-section-desc">Khám phá đa dạng danh mục sản phẩm cho mọi không gian</p></div><div class="np-cat-grid"><a onclick="navigate('shop','Sofa')" class="np-cat-card np-animate"><img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=500&fit=crop" alt="Sofa"><div class="np-cat-card-overlay"><h3 class="np-cat-card-title">Sofa & Ghế Sofa</h3><span class="np-cat-card-count">${products.filter(p=>p.cat==='Sofa').length} sản phẩm</span></div></a><a onclick="navigate('shop','Bàn')" class="np-cat-card np-animate"><img src="https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?w=400&h=500&fit=crop" alt="Bàn"><div class="np-cat-card-overlay"><h3 class="np-cat-card-title">Bàn Ăn & Làm Việc</h3><span class="np-cat-card-count">${products.filter(p=>p.cat==='Bàn').length} sản phẩm</span></div></a><a onclick="navigate('shop','Ghế')" class="np-cat-card np-animate"><img src="https://images.unsplash.com/photo-1503602642458-232111445657?w=400&h=500&fit=crop" alt="Ghế"><div class="np-cat-card-overlay"><h3 class="np-cat-card-title">Ghế Ăn & Văn Phòng</h3><span class="np-cat-card-count">${products.filter(p=>p.cat==='Ghế').length} sản phẩm</span></div></a><a onclick="navigate('shop','Tủ')" class="np-cat-card np-animate"><img src="https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=400&h=500&fit=crop" alt="Tủ Kệ"><div class="np-cat-card-overlay"><h3 class="np-cat-card-title">Tủ & Kệ Trang Trí</h3><span class="np-cat-card-count">${products.filter(p=>p.cat==='Tủ & Kệ').length} sản phẩm</span></div></a></div></div></section>
+    <section class="np-section"><div class="np-container"><div class="np-section-header"><span class="np-section-subtitle">Bán Chạy Nhất</span><h2 class="np-section-title">Sản Phẩm Nổi Bật</h2></div><div class="np-products-grid">${featured.map(productCard).join('')}</div><div style="text-align:center;margin-top:3rem"><a onclick="navigate('shop')" class="np-btn np-btn-dark">Xem Tất Cả ${products.length} Sản Phẩm <i class="fas fa-arrow-right"></i></a></div></div></section>
+    <section class="np-section np-features"><div class="np-container"><div class="np-section-header"><span class="np-section-subtitle" style="color:var(--np-accent)">Cam Kết</span><h2 class="np-section-title">Tại Sao Chọn NoiThat Pro?</h2></div><div class="np-features-grid"><div class="np-feature-card np-animate"><div class="np-feature-icon"><i class="fas fa-gem"></i></div><h3 class="np-feature-title">Chất Lượng Premium</h3><p class="np-feature-desc">Sản phẩm chọn lọc từ thương hiệu uy tín, chất lượng cao.</p></div><div class="np-feature-card np-animate"><div class="np-feature-icon"><i class="fas fa-truck"></i></div><h3 class="np-feature-title">Giao Hàng Miễn Phí</h3><p class="np-feature-desc">Miễn phí giao hàng cho đơn trên 5 triệu đồng.</p></div><div class="np-feature-card np-animate"><div class="np-feature-icon"><i class="fas fa-shield-alt"></i></div><h3 class="np-feature-title">Bảo Hành 12 Tháng</h3><p class="np-feature-desc">Bảo hành chính hãng, đổi trả trong 30 ngày.</p></div><div class="np-feature-card np-animate"><div class="np-feature-icon"><i class="fas fa-headset"></i></div><h3 class="np-feature-title">Tư Vấn 24/7</h3><p class="np-feature-desc">Đội ngũ tư vấn chuyên nghiệp mọi lúc mọi nơi.</p></div></div></div></section>
+    <section class="np-section"><div class="np-container"><div class="np-section-header"><span class="np-section-subtitle">Hàng Mới Về</span><h2 class="np-section-title">Sản Phẩm Mới Nhất</h2></div><div class="np-products-grid">${newP.map(productCard).join('')}</div></div></section>
+    <section class="np-cta"><div class="np-container"><h2 class="np-cta-title">Ưu Đãi Lên Đến 30%</h2><p class="np-cta-desc">Áp dụng cho tất cả sản phẩm nội thất phòng khách. Khuyến mãi có hạn!</p><a onclick="navigate('shop')" class="np-btn np-btn-primary" style="position:relative">Mua Ngay <i class="fas fa-arrow-right"></i></a></div></section>
+    <section class="np-section np-testimonials"><div class="np-container"><div class="np-section-header"><span class="np-section-subtitle">Khách Hàng Nói Gì</span><h2 class="np-section-title">Đánh Giá Từ Khách Hàng</h2></div><div class="np-testimonial-grid"><div class="np-testimonial-card np-animate"><div class="np-testimonial-stars">${stars(5)}</div><p class="np-testimonial-text">"Bộ sofa mua ở NoiThat Pro thực sự rất đẹp và chất lượng. Giao hàng nhanh, lắp đặt chuyên nghiệp!"</p><div class="np-testimonial-author"><div class="np-testimonial-avatar" style="background:linear-gradient(135deg,#8B6914,#D4A843)">NT</div><div><div class="np-testimonial-name">Nguyễn Thanh Tùng</div><div class="np-testimonial-role">TP.HCM</div></div></div></div><div class="np-testimonial-card np-animate"><div class="np-testimonial-stars">${stars(5)}</div><p class="np-testimonial-text">"Bàn ăn và bộ ghế thiết kế hiện đại, gỗ thật, giá hợp lý. Chắc chắn sẽ quay lại!"</p><div class="np-testimonial-author"><div class="np-testimonial-avatar" style="background:linear-gradient(135deg,#6B5010,#C4A235)">TL</div><div><div class="np-testimonial-name">Trần Thị Lan</div><div class="np-testimonial-role">Hà Nội</div></div></div></div><div class="np-testimonial-card np-animate"><div class="np-testimonial-stars">${stars(4.5)}</div><p class="np-testimonial-text">"Dịch vụ tư vấn tận tâm, giúp tôi chọn được nội thất phù hợp hoàn hảo!"</p><div class="np-testimonial-author"><div class="np-testimonial-avatar" style="background:linear-gradient(135deg,#2C2C2C,#4A4A4A)">PM</div><div><div class="np-testimonial-name">Phạm Minh Đức</div><div class="np-testimonial-role">Đà Nẵng</div></div></div></div></div></div></section>`;
+}
+
+function renderShop(){
+    const cats=getCategories();
+    const filtered=shopFilter==='Tất cả'?products:products.filter(p=>p.cat.includes(shopFilter));
+    const totalPages=Math.ceil(filtered.length/ITEMS_PER_PAGE);
+    const paged=filtered.slice((shopPage-1)*ITEMS_PER_PAGE,shopPage*ITEMS_PER_PAGE);
+    let paginationHTML='';
+    if(totalPages>1){
+        paginationHTML=`<div class="np-pagination"><button onclick="shopPage=1;renderShop()" ${shopPage===1?'disabled':''}><i class="fas fa-angle-double-left"></i></button><button onclick="shopPage=Math.max(1,shopPage-1);renderShop()" ${shopPage===1?'disabled':''}><i class="fas fa-angle-left"></i></button>`;
+        for(let i=1;i<=totalPages;i++) paginationHTML+=`<button onclick="shopPage=${i};renderShop();window.scrollTo({top:300,behavior:'smooth'})" class="${i===shopPage?'active':''}">${i}</button>`;
+        paginationHTML+=`<button onclick="shopPage=Math.min(${totalPages},shopPage+1);renderShop()" ${shopPage===totalPages?'disabled':''}><i class="fas fa-angle-right"></i></button><button onclick="shopPage=${totalPages};renderShop()" ${shopPage===totalPages?'disabled':''}><i class="fas fa-angle-double-right"></i></button></div>`;
+    }
+    document.getElementById('app').innerHTML=`
+    <section class="np-page-header"><div class="np-container"><span class="np-section-subtitle">Cửa Hàng</span><h1>${shopFilter==='Tất cả'?'Tất Cả Sản Phẩm':shopFilter}</h1><p>Hiển thị ${filtered.length} sản phẩm</p></div></section>
+    <section class="np-section" style="padding-top:3rem"><div class="np-container">
+        <div class="np-breadcrumb"><a onclick="navigate('home')">Trang chủ</a><span class="sep"><i class="fas fa-chevron-right" style="font-size:.7em"></i></span><span>Cửa Hàng</span>${shopFilter!=='Tất cả'?`<span class="sep"><i class="fas fa-chevron-right" style="font-size:.7em"></i></span><span>${shopFilter}</span>`:''}</div>
+        <div class="np-shop-toolbar"><div class="np-filter-tabs">${cats.map(c=>`<button class="np-filter-tab ${c===shopFilter?'active':''}" onclick="shopFilter='${c}';shopPage=1;renderShop()">${c}</button>`).join('')}</div><div class="np-shop-count">Trang ${shopPage}/${totalPages} (${filtered.length} SP)</div></div>
+        <div class="np-products-grid">${paged.map(productCard).join('')}</div>
+        ${paginationHTML}
+    </div></section>`;
+}
+
+function renderProduct(id){
+    const p=products.find(x=>x.id===id);if(!p)return navigate('shop');
+    const related=products.filter(x=>x.cat===p.cat&&x.id!==p.id).slice(0,4);
+    document.getElementById('app').innerHTML=`
+    <section class="np-section" style="padding-top:2rem"><div class="np-container">
+        <div class="np-breadcrumb"><a onclick="navigate('home')">Trang chủ</a><span class="sep"><i class="fas fa-chevron-right" style="font-size:.7em"></i></span><a onclick="navigate('shop')">Cửa hàng</a><span class="sep"><i class="fas fa-chevron-right" style="font-size:.7em"></i></span><a onclick="navigate('shop','${p.cat}')">${p.cat}</a><span class="sep"><i class="fas fa-chevron-right" style="font-size:.7em"></i></span><span>${p.name}</span></div>
+        <div class="np-detail-grid" style="margin-top:2rem">
+            <div class="np-detail-img np-animate"><img src="${p.img}" alt="${p.name}"></div>
+            <div class="np-animate">
+                <div class="np-detail-cat">${p.cat}</div>
+                <h1 class="np-detail-title">${p.name}</h1>
+                <div class="np-product-rating" style="margin-bottom:1rem"><div class="np-rating-stars">${stars(p.rating)}</div><span class="np-rating-count">(${p.reviews} đánh giá)</span></div>
+                <div class="np-detail-price">${p.origPrice?`<span class="np-price-original" style="font-size:1.2rem">${fmt(p.origPrice)}</span>`:''}<span class="np-price-current" style="font-size:1.8rem">${fmt(p.price)}</span>${p.origPrice?`<span style="background:var(--np-danger);color:white;padding:4px 12px;border-radius:50px;font-size:.8rem;font-weight:700">-${Math.round((1-p.price/p.origPrice)*100)}%</span>`:''}</div>
+                <p class="np-detail-desc">${p.desc}</p>
+                <ul class="np-detail-features" style="list-style:none;margin-bottom:2rem">${['Chất liệu cao cấp, bền bỉ','Bảo hành 12 tháng chính hãng','Miễn phí giao hàng & lắp đặt','Đổi trả trong 30 ngày'].map(f=>`<li><i class="fas fa-check-circle"></i>${f}</li>`).join('')}</ul>
+                <div class="np-detail-actions">
+                    <div class="np-qty-wrap"><button onclick="detailQty(-1)">−</button><span id="detail-qty">1</span><button onclick="detailQty(1)">+</button></div>
+                    <button class="np-btn np-btn-primary" onclick="addToCartQty(${p.id})"><i class="fas fa-shopping-cart"></i> Thêm vào giỏ</button>
+                </div>
+            </div>
+        </div>
+    </div></section>
+    ${related.length?`<section class="np-section" style="background:var(--np-bg-section)"><div class="np-container"><div class="np-section-header"><span class="np-section-subtitle">Có Thể Bạn Thích</span><h2 class="np-section-title">Sản Phẩm Liên Quan</h2></div><div class="np-products-grid">${related.map(productCard).join('')}</div></div></section>`:''}`;
+}
+
+function renderAbout(){
+    document.getElementById('app').innerHTML=`
+    <section class="np-page-header"><div class="np-container"><span class="np-section-subtitle">Về Chúng Tôi</span><h1>Câu Chuyện NoiThat Pro</h1><p>Hơn 15 năm đồng hành cùng hàng ngàn gia đình Việt kiến tạo không gian sống hoàn hảo</p></div></section>
+    <section class="np-section"><div class="np-container"><div class="np-about-grid"><div class="np-animate"><span class="np-section-subtitle">Sứ Mệnh</span><h2 style="font-size:2rem;margin-bottom:1.5rem">Mang Đến Giải Pháp Nội Thất <span style="color:var(--np-primary)">Toàn Diện</span></h2><p style="color:var(--np-text-secondary);line-height:1.8;margin-bottom:1.5rem">NoiThat Pro được thành lập năm 2009 với sứ mệnh mang đến sản phẩm nội thất chất lượng cao, thiết kế hiện đại với mức giá phải chăng. Chúng tôi tin rằng mỗi ngôi nhà đều xứng đáng có không gian sống đẹp và tiện nghi.</p><div style="display:flex;gap:2rem;flex-wrap:wrap;margin-top:2rem"><div><div style="font-family:var(--np-font-heading);font-size:2.5rem;font-weight:700;color:var(--np-primary)">15+</div><div style="color:var(--np-text-secondary);font-size:.9rem">Năm Kinh Nghiệm</div></div><div><div style="font-family:var(--np-font-heading);font-size:2.5rem;font-weight:700;color:var(--np-primary)">10K+</div><div style="color:var(--np-text-secondary);font-size:.9rem">Khách Hàng</div></div><div><div style="font-family:var(--np-font-heading);font-size:2.5rem;font-weight:700;color:var(--np-primary)">${products.length}</div><div style="color:var(--np-text-secondary);font-size:.9rem">Sản Phẩm</div></div></div></div><div class="np-animate" style="border-radius:var(--np-radius-lg);overflow:hidden;box-shadow:var(--np-shadow-lg)"><img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop" alt="Showroom" style="width:100%;height:100%;object-fit:cover;min-height:400px"></div></div></div></section>
+    <section class="np-section np-features"><div class="np-container"><div class="np-section-header"><span class="np-section-subtitle" style="color:var(--np-accent)">Giá Trị Cốt Lõi</span><h2 class="np-section-title">Cam Kết Của Chúng Tôi</h2></div><div class="np-features-grid"><div class="np-feature-card np-animate"><div class="np-feature-icon"><i class="fas fa-award"></i></div><h3 class="np-feature-title">Chất Lượng</h3><p class="np-feature-desc">Nguyên liệu nhập khẩu, quy trình sản xuất theo chuẩn quốc tế.</p></div><div class="np-feature-card np-animate"><div class="np-feature-icon"><i class="fas fa-palette"></i></div><h3 class="np-feature-title">Thiết Kế</h3><p class="np-feature-desc">Đội ngũ thiết kế giàu kinh nghiệm, cập nhật xu hướng mới nhất.</p></div><div class="np-feature-card np-animate"><div class="np-feature-icon"><i class="fas fa-hand-holding-heart"></i></div><h3 class="np-feature-title">Tận Tâm</h3><p class="np-feature-desc">Giao hàng nhanh, lắp đặt chuyên nghiệp tận nhà.</p></div><div class="np-feature-card np-animate"><div class="np-feature-icon"><i class="fas fa-recycle"></i></div><h3 class="np-feature-title">Bền Vững</h3><p class="np-feature-desc">Nguyên liệu thân thiện môi trường, giảm thiểu tác động.</p></div></div></div></section>`;
+}
+
+function renderContact(){
+    document.getElementById('app').innerHTML=`
+    <section class="np-page-header"><div class="np-container"><span class="np-section-subtitle">Hỗ Trợ</span><h1>Liên Hệ Với Chúng Tôi</h1><p>Hãy liên hệ để được tư vấn miễn phí về giải pháp nội thất phù hợp nhất</p></div></section>
+    <section class="np-section"><div class="np-container"><div class="np-contact-grid"><div class="np-contact-form-wrapper np-animate"><h2 style="font-family:var(--np-font-heading);font-size:1.5rem;margin-bottom:1.5rem"><i class="fas fa-paper-plane" style="color:var(--np-primary);margin-right:8px"></i>Gửi Tin Nhắn</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem"><input class="np-form-input" placeholder="Họ và tên *"><input class="np-form-input" placeholder="Email *" type="email"></div><input class="np-form-input" placeholder="Số điện thoại"><input class="np-form-input" placeholder="Tiêu đề"><textarea class="np-form-input" rows="4" placeholder="Nội dung *" style="resize:vertical"></textarea><button class="np-btn np-btn-primary" style="width:100%;justify-content:center" onclick="showToast('Đã gửi tin nhắn thành công!')"><i class="fas fa-paper-plane"></i> Gửi Tin Nhắn</button></div><div class="np-animate"><h2 style="font-family:var(--np-font-heading);font-size:1.5rem;margin-bottom:1.5rem">Thông Tin</h2><div class="np-contact-info-card"><div class="np-contact-info-icon"><i class="fas fa-map-marker-alt"></i></div><div><strong>Showroom</strong><br><span style="color:var(--np-text-secondary)">123 Nguyễn Huệ, Q.1, TP.HCM</span></div></div><div class="np-contact-info-card"><div class="np-contact-info-icon"><i class="fas fa-phone-alt"></i></div><div><strong>Hotline</strong><br><span style="color:var(--np-text-secondary)">0987 654 321</span></div></div><div class="np-contact-info-card"><div class="np-contact-info-icon"><i class="fas fa-envelope"></i></div><div><strong>Email</strong><br><span style="color:var(--np-text-secondary)">info@noithatpro.vn</span></div></div><div class="np-contact-info-card"><div class="np-contact-info-icon"><i class="fas fa-clock"></i></div><div><strong>Giờ Làm Việc</strong><br><span style="color:var(--np-text-secondary)">T2-CN: 8:00-21:00</span></div></div></div></div></div></section>`;
+}
+
+function renderCartPage(){
+    document.getElementById('app').innerHTML=`
+    <section class="np-page-header"><div class="np-container"><span class="np-section-subtitle">Giỏ Hàng</span><h1>Giỏ Hàng Của Bạn</h1><p>${cart.length?`${getCartCount()} sản phẩm trong giỏ hàng`:'Giỏ hàng đang trống'}</p></div></section>
+    <section class="np-section" style="padding-top:3rem"><div class="np-container">${cart.length?`
+        <div class="np-breadcrumb"><a onclick="navigate('home')">Trang chủ</a><span class="sep"><i class="fas fa-chevron-right" style="font-size:.7em"></i></span><span>Giỏ hàng</span></div>
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:3rem;margin-top:1rem">
+        <div style="overflow-x:auto"><table class="np-cart-table"><thead><tr><th>Sản phẩm</th><th>Giá</th><th>Số lượng</th><th>Tổng</th><th></th></tr></thead><tbody>${cart.map(i=>`<tr><td><div class="product-cell"><img src="${i.img}" alt="${i.name}"><div><div style="font-weight:600">${i.name}</div><div style="color:var(--np-text-light);font-size:.8rem">${i.cat}</div></div></div></td><td style="font-weight:600">${fmt(i.price)}</td><td><div class="np-cart-item-qty"><button class="np-qty-btn" onclick="changeQty(${i.id},-1);renderCartPage()"><i class="fas fa-minus"></i></button><span class="np-qty-value">${i.qty}</span><button class="np-qty-btn" onclick="changeQty(${i.id},1);renderCartPage()"><i class="fas fa-plus"></i></button></div></td><td style="font-weight:700;color:var(--np-primary)">${fmt(i.price*i.qty)}</td><td><button onclick="removeFromCart(${i.id});renderCartPage()" style="border:none;background:none;color:var(--np-text-light);cursor:pointer;font-size:1.1rem" title="Xóa"><i class="fas fa-trash-alt"></i></button></td></tr>`).join('')}</tbody></table></div>
+        <div class="np-cart-summary"><h3 style="font-family:var(--np-font-heading);font-size:1.2rem;margin-bottom:1.5rem">Tổng Đơn Hàng</h3><div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:.9rem"><span>Tạm tính</span><span>${fmt(getCartTotal())}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:.9rem"><span>Vận chuyển</span><span>${getCartTotal()>=5000000?'<span style="color:var(--np-success);font-weight:600">Miễn phí</span>':fmt(150000)}</span></div><div style="display:flex;justify-content:space-between;padding-top:1rem;border-top:2px solid var(--np-primary);margin-top:1rem;font-size:1.1rem;font-weight:700;color:var(--np-primary)"><span>Tổng cộng</span><span>${fmt(getCartTotal()+(getCartTotal()>=5000000?0:150000))}</span></div><button class="np-btn np-btn-primary" style="width:100%;justify-content:center;margin-top:1.5rem" onclick="navigate('checkout')"><i class="fas fa-credit-card"></i> Thanh Toán</button><button class="np-btn" style="width:100%;justify-content:center;margin-top:8px;border:1px solid var(--np-border);padding:12px" onclick="navigate('shop')"><i class="fas fa-arrow-left"></i> Tiếp tục mua sắm</button></div></div>`:`<div style="text-align:center;padding:4rem 0"><i class="fas fa-shopping-bag" style="font-size:4rem;color:var(--np-text-light);margin-bottom:1.5rem;display:block"></i><h2 style="margin-bottom:1rem">Giỏ hàng trống</h2><p style="color:var(--np-text-secondary);margin-bottom:2rem">Hãy thêm sản phẩm yêu thích vào giỏ!</p><a onclick="navigate('shop')" class="np-btn np-btn-primary"><i class="fas fa-store"></i> Xem Cửa Hàng</a></div>`}</div></section>`;
+}
+
+function renderCheckout(){
+    if(!cart.length) return navigate('shop');
+    const ship=getCartTotal()>=5000000?0:150000;const total=getCartTotal()+ship;
+    document.getElementById('app').innerHTML=`
+    <section class="np-page-header"><div class="np-container"><span class="np-section-subtitle">Thanh Toán</span><h1>Thông Tin Đặt Hàng</h1></div></section>
+    <section class="np-section" style="padding-top:3rem"><div class="np-container"><div class="np-breadcrumb"><a onclick="navigate('home')">Trang chủ</a><span class="sep"><i class="fas fa-chevron-right" style="font-size:.7em"></i></span><a onclick="navigate('cart')">Giỏ hàng</a><span class="sep"><i class="fas fa-chevron-right" style="font-size:.7em"></i></span><span>Thanh toán</span></div>
+    <div class="np-checkout-grid" style="margin-top:1rem"><div><h3 style="font-family:var(--np-font-heading);font-size:1.2rem;margin-bottom:1.5rem"><i class="fas fa-shipping-fast" style="color:var(--np-primary);margin-right:8px"></i>Thông Tin Giao Hàng</h3><div class="np-form-row"><div class="np-form-group"><label class="np-form-label">Họ và tên *</label><input class="np-form-input" id="ck-name" placeholder="Nguyễn Văn A"></div><div class="np-form-group"><label class="np-form-label">Số điện thoại *</label><input class="np-form-input" id="ck-phone" placeholder="0987 654 321"></div></div><div class="np-form-group"><label class="np-form-label">Email</label><input class="np-form-input" id="ck-email" placeholder="email@example.com" type="email"></div><div class="np-form-group"><label class="np-form-label">Địa chỉ giao hàng *</label><input class="np-form-input" id="ck-address" placeholder="Số nhà, đường, phường/xã"></div><div class="np-form-row"><div class="np-form-group"><label class="np-form-label">Quận/Huyện</label><input class="np-form-input" placeholder="Quận 1"></div><div class="np-form-group"><label class="np-form-label">Tỉnh/TP</label><input class="np-form-input" placeholder="TP.HCM" value="TP. Hồ Chí Minh"></div></div><div class="np-form-group"><label class="np-form-label">Ghi chú</label><textarea class="np-form-input" rows="3" placeholder="Ghi chú thêm..." style="resize:vertical"></textarea></div>
+    <h3 style="font-family:var(--np-font-heading);font-size:1.2rem;margin:2rem 0 1rem"><i class="fas fa-credit-card" style="color:var(--np-primary);margin-right:8px"></i>Phương Thức Thanh Toán</h3><div class="np-payment-methods"><div class="np-payment-method selected" onclick="selPay(this)"><i class="fas fa-money-bill-wave"></i> COD</div><div class="np-payment-method" onclick="selPay(this)"><i class="fas fa-university"></i> Chuyển khoản</div><div class="np-payment-method" onclick="selPay(this)"><i class="fas fa-wallet"></i> Ví MoMo</div><div class="np-payment-method" onclick="selPay(this)"><i class="fas fa-credit-card"></i> VNPay</div></div>
+    <button class="np-btn np-btn-primary" style="width:100%;justify-content:center;margin-top:2rem;padding:18px" onclick="placeOrder()"><i class="fas fa-check-circle"></i> Đặt Hàng - ${fmt(total)}</button></div>
+    <div class="np-checkout-summary"><h3 style="font-family:var(--np-font-heading);font-size:1.1rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--np-border-light)"><i class="fas fa-shopping-bag" style="color:var(--np-primary);margin-right:6px"></i>Đơn Hàng (${getCartCount()} SP)</h3>${cart.map(i=>`<div class="np-checkout-item"><img src="${i.img}" alt="${i.name}"><div style="flex:1"><div style="font-weight:600;font-size:.85rem">${i.name}</div><div style="color:var(--np-text-light);font-size:.8rem">SL: ${i.qty}</div></div><div style="font-weight:700;font-size:.85rem;color:var(--np-primary);white-space:nowrap">${fmt(i.price*i.qty)}</div></div>`).join('')}<div class="np-checkout-totals"><div class="np-checkout-total-row"><span>Tạm tính</span><span>${fmt(getCartTotal())}</span></div><div class="np-checkout-total-row"><span>Vận chuyển</span><span>${ship===0?'Miễn phí':fmt(ship)}</span></div><div class="np-checkout-total-row grand"><span>Tổng cộng</span><span>${fmt(total)}</span></div></div></div></div></div></section>`;
+}
+function selPay(el){document.querySelectorAll('.np-payment-method').forEach(m=>m.classList.remove('selected'));el.classList.add('selected');}
+function placeOrder(){
+    const n=document.getElementById('ck-name')?.value?.trim(),p=document.getElementById('ck-phone')?.value?.trim(),a=document.getElementById('ck-address')?.value?.trim();
+    if(!n||!p||!a){showToast('Vui lòng điền đầy đủ thông tin bắt buộc!');return;}
+    const oid='NTP-'+Date.now().toString().slice(-6);const total=getCartTotal()+(getCartTotal()>=5000000?0:150000);
+    document.getElementById('app').innerHTML=`<section class="np-section" style="padding:6rem 0"><div class="np-container" style="text-align:center;max-width:600px"><div style="width:100px;height:100px;border-radius:50%;background:rgba(76,175,80,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem"><i class="fas fa-check-circle" style="font-size:3.5rem;color:var(--np-success)"></i></div><h1 style="font-size:1.8rem;margin-bottom:.5rem">Đặt Hàng Thành Công!</h1><p style="color:var(--np-text-secondary);margin-bottom:2rem;font-size:1.05rem">Cảm ơn bạn đã mua hàng tại NoiThat Pro</p><div style="background:var(--np-bg-section);padding:2rem;border-radius:var(--np-radius-md);text-align:left;margin-bottom:2rem"><div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:.9rem"><span style="color:var(--np-text-light)">Mã đơn hàng:</span><strong style="color:var(--np-primary)">${oid}</strong></div><div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:.9rem"><span style="color:var(--np-text-light)">Khách hàng:</span><strong>${n}</strong></div><div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:.9rem"><span style="color:var(--np-text-light)">Số sản phẩm:</span><strong>${getCartCount()}</strong></div><div style="display:flex;justify-content:space-between;font-size:.9rem"><span style="color:var(--np-text-light)">Tổng tiền:</span><strong style="color:var(--np-primary);font-size:1.1rem">${fmt(total)}</strong></div></div><p style="color:var(--np-text-light);font-size:.85rem;margin-bottom:2rem"><i class="fas fa-truck" style="margin-right:6px"></i>Dự kiến giao hàng trong 3-5 ngày làm việc</p><div style="display:flex;gap:12px;justify-content:center"><a onclick="navigate('home')" class="np-btn np-btn-primary"><i class="fas fa-home"></i> Trang Chủ</a><a onclick="navigate('shop')" class="np-btn np-btn-dark"><i class="fas fa-store"></i> Tiếp Tục Mua</a></div></div></section>`;
+    cart=[];updateCartUI();
+}
+
+// ===================== CART LOGIC =====================
+function addToCart(id){const p=products.find(x=>x.id===id);if(!p)return;const e=cart.find(x=>x.id===id);if(e)e.qty++;else cart.push({...p,qty:1});updateCartUI();showToast(`Đã thêm "${p.name}" vào giỏ!`);openCart();}
+function addToCartQty(id){const q=parseInt(document.getElementById('detail-qty')?.textContent||1);const p=products.find(x=>x.id===id);if(!p)return;const e=cart.find(x=>x.id===id);if(e)e.qty+=q;else cart.push({...p,qty:q});updateCartUI();showToast(`Đã thêm ${q}x "${p.name}" vào giỏ!`);openCart();}
+function detailQty(d){const el=document.getElementById('detail-qty');let v=parseInt(el.textContent)+d;if(v<1)v=1;el.textContent=v;}
+function removeFromCart(id){cart=cart.filter(x=>x.id!==id);updateCartUI();}
+function changeQty(id,d){const i=cart.find(x=>x.id===id);if(!i)return;i.qty+=d;if(i.qty<=0){removeFromCart(id);return;}updateCartUI();}
+function getCartTotal(){return cart.reduce((s,i)=>s+i.price*i.qty,0);}
+function getCartCount(){return cart.reduce((s,i)=>s+i.qty,0);}
+function updateCartUI(){
+    const c=getCartCount();document.getElementById('cart-count').textContent=c;document.getElementById('cart-total-items').textContent=c;
+    const el=document.getElementById('cart-count');el.style.transform='scale(1.4)';setTimeout(()=>el.style.transform='scale(1)',300);
+    const items=document.getElementById('cart-items'),footer=document.getElementById('cart-footer');
+    if(!cart.length){items.innerHTML='<div class="np-cart-empty"><i class="fas fa-shopping-bag"></i><p style="font-size:1.1rem;font-weight:600;margin-bottom:6px">Giỏ hàng trống</p><p style="font-size:.9rem">Hãy thêm sản phẩm yêu thích!</p></div>';footer.style.display='none';return;}
+    footer.style.display='block';document.getElementById('cart-subtotal').textContent=fmt(getCartTotal());
+    items.innerHTML=cart.map(i=>`<div class="np-cart-item"><img src="${i.img}" alt="${i.name}"><div class="np-cart-item-info"><div class="np-cart-item-name">${i.name}</div><div class="np-cart-item-price">${fmt(i.price)}</div><div class="np-cart-item-qty"><button class="np-qty-btn" onclick="changeQty(${i.id},-1)"><i class="fas fa-minus"></i></button><span class="np-qty-value">${i.qty}</span><button class="np-qty-btn" onclick="changeQty(${i.id},1)"><i class="fas fa-plus"></i></button></div></div><button class="np-cart-item-remove" onclick="removeFromCart(${i.id})" title="Xóa"><i class="fas fa-trash-alt"></i></button></div>`).join('');
+}
+
+// ===================== SEARCH =====================
+function openSearch(){document.getElementById('search-overlay').classList.add('active');document.getElementById('search-input').value='';document.getElementById('search-results').innerHTML='';document.getElementById('search-hint').style.display='block';setTimeout(()=>document.getElementById('search-input').focus(),100);document.body.style.overflow='hidden';}
+function closeSearch(){document.getElementById('search-overlay').classList.remove('active');document.body.style.overflow='';}
+function handleSearch(q){
+    const res=document.getElementById('search-results'),hint=document.getElementById('search-hint');
+    if(!q.trim()){res.innerHTML='';hint.style.display='block';return;}hint.style.display='none';
+    const matched=products.filter(p=>p.name.toLowerCase().includes(q.toLowerCase())||p.cat.toLowerCase().includes(q.toLowerCase()));
+    if(!matched.length){res.innerHTML=`<div style="text-align:center;color:rgba(255,255,255,.5);padding:2rem"><i class="fas fa-search" style="font-size:2rem;margin-bottom:1rem;display:block"></i>Không tìm thấy "${q}"</div>`;return;}
+    res.innerHTML=matched.slice(0,8).map(p=>`<div class="np-search-result-item" onclick="closeSearch();navigate('product',${p.id})"><img src="${p.img}" alt="${p.name}"><div style="flex:1"><div class="np-search-result-name">${p.name}</div><div class="np-search-result-price">${fmt(p.price)}</div></div><button class="np-btn np-btn-primary np-btn-sm" onclick="event.stopPropagation();addToCart(${p.id});closeSearch()"><i class="fas fa-cart-plus"></i></button></div>`).join('');
+}
+
+// ===================== CART DRAWER =====================
+function openCart(){document.getElementById('cart-overlay').classList.add('active');document.getElementById('cart-drawer').classList.add('active');document.body.style.overflow='hidden';}
+function closeCart(){document.getElementById('cart-overlay').classList.remove('active');document.getElementById('cart-drawer').classList.remove('active');document.body.style.overflow='';}
+
+// ===================== TOAST =====================
+function showToast(msg){const t=document.getElementById('np-toast');document.getElementById('toast-msg').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+// ===================== UI INIT =====================
+const header=document.querySelector('.np-header');window.addEventListener('scroll',()=>header.classList.toggle('scrolled',window.scrollY>50));
+const toggle=document.getElementById('np-menu-toggle'),nav=document.getElementById('np-main-nav');
+toggle.addEventListener('click',()=>{nav.classList.toggle('active');const s=toggle.querySelectorAll('span');toggle.classList.toggle('open');if(toggle.classList.contains('open')){s[0].style.transform='rotate(45deg) translate(5px,5px)';s[1].style.opacity='0';s[2].style.transform='rotate(-45deg) translate(5px,-5px)';}else{s[0].style.transform='none';s[1].style.opacity='1';s[2].style.transform='none';}});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+const btt=document.getElementById('np-back-to-top');window.addEventListener('scroll',()=>btt.classList.toggle('visible',window.scrollY>500));btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSearch();closeCart();}});
+
+// START
+navigate('home');
+updateCartUI();
+</script>
+</body>
+</html>
