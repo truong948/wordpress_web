@@ -40,9 +40,19 @@
 
 ## Bước 5: Import Sản Phẩm
 1. WordPress Admin → Products → All Products → Import
-2. Chọn file `database/products-import.csv`
+2. Chọn file `database/products-import.host-safe.csv` (khuyên dùng cho host free)
 3. Map columns → Run Importer
-4. Thêm ảnh cho từng sản phẩm (lấy từ Unsplash/Pexels)
+4. Nếu host free không tải được ảnh từ URL ngoài, theme sẽ tự hiển thị ảnh fallback nội bộ (`product-placeholder.svg`) để tránh ảnh bị vỡ
+5. Sau import, nên kiểm tra vài sản phẩm và gán lại ảnh thật trong Media Library nếu cần chất lượng demo tốt hơn
+
+### Kiểm tra CSV trước khi deploy (trên máy local)
+- Chạy `npm run csv:check-images` để phát hiện link localhost/private trong cột ảnh
+- Chạy `npm run csv:host-safe` để tạo file import ổn định cho host miễn phí
+- Chạy `npm run csv:export-image-map` để xuất map SKU -> URL ảnh vào theme (`assets/data/sku-image-map.json`)
+
+### Cơ chế ảnh hiệu quả hơn (đã tích hợp trong theme)
+- Khi host free import không tải được ảnh vào Media, theme sẽ tự lấy ảnh theo SKU từ file map và hiển thị ảnh thật (không còn bị ô trống)
+- Nếu SKU không có trong map, hệ thống fallback về ảnh placeholder nội bộ
 
 ## Bước 6: Tạo Các Trang
 1. Pages → Add New:

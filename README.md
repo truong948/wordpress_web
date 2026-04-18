@@ -18,7 +18,7 @@
 - ⚡ **Tối ưu hiệu suất** (lazy loading, cleanup)
 - 📧 **Form liên hệ** (Contact Form 7)
 - 🧩 **Custom Shortcodes** tiếng Việt
-- 🛍️ **10 sản phẩm mẫu** có sẵn (CSV import)
+- 🛍️ **30 sản phẩm mẫu** có sẵn (CSV import)
 - ⚙️ **Admin Panel** tùy chỉnh
 
 ## 🛠️ Tech Stack
@@ -45,7 +45,10 @@
 │   ├── page-contact.php               # Liên hệ
 │   └── assets/                        # CSS, JS, Images
 ├── wp-content/plugins/noithat-features/  # Custom Plugin
-├── database/products-import.csv       # 10 SP mẫu
+├── database/products-import.csv       # 30 SP mẫu (có URL ảnh)
+├── database/products-import.host-safe.csv  # CSV cho host free (không tải ảnh ngoài)
+├── scripts/check-products-csv-images.js    # Kiểm tra link ảnh localhost/private
+├── scripts/make-host-safe-products-csv.js  # Tạo CSV host-safe
 └── docs/DEPLOY_GUIDE.md              # Hướng dẫn deploy
 ```
 
@@ -56,8 +59,10 @@
 3. Upload & activate child theme `noithat-pro`
 4. Cài plugins: WooCommerce, Yoast SEO, Wordfence, CF7
 5. Upload & activate plugin `noithat-features`
-6. Import sản phẩm từ `products-import.csv`
-7. Tạo trang & menu
+6. Trước khi deploy: chạy `npm run csv:check-images`, `npm run csv:host-safe`, `npm run csv:export-image-map`
+7. Import sản phẩm từ `products-import.host-safe.csv` trên host free
+8. Theme sẽ tự fallback ảnh theo SKU từ file map nếu host không tải được ảnh vào Media
+9. Tạo trang & menu
 
 > Chi tiết xem file `docs/DEPLOY_GUIDE.md`
 
