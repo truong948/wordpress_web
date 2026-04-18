@@ -58,13 +58,19 @@ get_header();
                     ?>
                     <div class="np-product-card np-animate">
                         <div class="np-product-img-wrap">
-                            <?php if (has_post_thumbnail()) : ?>
-                                <a href="<?php the_permalink(); ?>">
-                                    <?php the_post_thumbnail('np-product-thumb'); ?>
-                                </a>
-                            <?php else : ?>
-                                <div class="np-placeholder-img"><i class="fas fa-image"></i></div>
-                            <?php endif; ?>
+                            <a href="<?php the_permalink(); ?>">
+                                <?php
+                                if (function_exists('noithat_pro_get_product_image_html')) {
+                                    echo noithat_pro_get_product_image_html(get_the_ID(), 'np-product-thumb');
+                                } elseif (has_post_thumbnail()) {
+                                    the_post_thumbnail('np-product-thumb');
+                                } else {
+                                    echo function_exists('wc_placeholder_img')
+                                        ? wc_placeholder_img('np-product-thumb', array('loading' => 'lazy'))
+                                        : '<span class="np-placeholder-img"><i class="fas fa-image"></i></span>';
+                                }
+                                ?>
+                            </a>
                             
                             <?php if ($product->is_on_sale()) : ?>
                                 <span class="np-product-badge np-badge-sale">Giảm giá</span>

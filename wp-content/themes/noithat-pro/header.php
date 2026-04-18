@@ -57,30 +57,20 @@ $np_logout_url = wp_logout_url(home_url('/'));
         
         <!-- Menu điều hướng chính -->
         <nav class="np-nav" id="np-main-nav">
-            <?php
-            // Hiển thị menu đã đăng ký trong functions.php
-            if (has_nav_menu('primary-menu')) {
-                wp_nav_menu(array(
-                    'theme_location' => 'primary-menu',
-                    'container'      => false,
-                    'menu_class'     => '',
-                    'fallback_cb'    => false,
-                ));
-            } else {
-                // Menu mặc định nếu chưa cấu hình
-                ?>
-                <ul>
-                    <li class="current-menu-item"><a href="<?php echo esc_url(home_url('/')); ?>">Trang Chủ</a></li>
-                    <li><a href="<?php echo esc_url($np_shop_url); ?>">Cửa Hàng</a></li>
-                    <li><a href="<?php echo esc_url(noithat_pro_get_product_category_url('sofa')); ?>">Sofa</a></li>
-                    <li><a href="<?php echo esc_url(noithat_pro_get_product_category_url('ban')); ?>">Bàn</a></li>
-                    <li><a href="<?php echo esc_url(noithat_pro_get_product_category_url('ghe')); ?>">Ghế</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/gioi-thieu')); ?>">Giới Thiệu</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/lien-he')); ?>">Liên Hệ</a></li>
-                </ul>
-                <?php
-            }
-            ?>
+            <ul>
+                <li class="<?php echo is_front_page() ? 'current-menu-item' : ''; ?>">
+                    <a href="<?php echo esc_url(home_url('/')); ?>">Trang Chủ</a>
+                </li>
+                <li class="<?php echo (function_exists('is_shop') && (is_shop() || is_product_taxonomy() || is_product_category() || is_product_tag())) ? 'current-menu-item' : ''; ?>">
+                    <a href="<?php echo esc_url($np_shop_url); ?>">Cửa Hàng</a>
+                </li>
+                <li class="<?php echo is_page('gioi-thieu') ? 'current-menu-item' : ''; ?>">
+                    <a href="<?php echo esc_url(home_url('/gioi-thieu')); ?>">Giới Thiệu</a>
+                </li>
+                <li class="<?php echo is_page('lien-he') ? 'current-menu-item' : ''; ?>">
+                    <a href="<?php echo esc_url(home_url('/lien-he')); ?>">Liên Hệ</a>
+                </li>
+            </ul>
         </nav>
         
         <!-- Header Actions: Tìm kiếm + Giỏ hàng + Menu mobile -->

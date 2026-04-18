@@ -7,7 +7,11 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "csv:verify": "node scripts/verify-products-csv.js",
+    "csv:check-images": "node scripts/check-products-csv-images.js",
+    "csv:host-safe": "node scripts/make-host-safe-products-csv.js",
+    "csv:export-image-map": "node scripts/export-sku-image-map.js"
   },
   "repository": {
     "type": "git",

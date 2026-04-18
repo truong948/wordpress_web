@@ -84,6 +84,7 @@ function noithat_pro_enqueue_assets() {
         'siteUrl'  => home_url('/'),
         'shopUrl'  => function_exists('wc_get_page_permalink') 
                       ? wc_get_page_permalink('shop') : '',
+        'placeholderImage' => noithat_pro_get_product_placeholder_url(),
     ));
 }
 add_action('wp_enqueue_scripts', 'noithat_pro_enqueue_assets', 20);
@@ -136,6 +137,253 @@ function noithat_pro_setup() {
     ));
 }
 add_action('after_setup_theme', 'noithat_pro_setup');
+
+/**
+ * URL ảnh fallback cho sản phẩm khi deploy/import không tải được ảnh từ CSV.
+ */
+function noithat_pro_get_product_placeholder_url() {
+    return get_stylesheet_directory_uri() . '/assets/images/product-placeholder.svg';
+}
+
+/**
+ * Đồng bộ placeholder WooCommerce sang ảnh local của theme để tránh phụ thuộc URL ngoài.
+ */
+function noithat_pro_woocommerce_placeholder_src($src) {
+    return noithat_pro_get_product_placeholder_url();
+}
+add_filter('woocommerce_placeholder_img_src', 'noithat_pro_woocommerce_placeholder_src');
+
+/**
+ * Nạp map ảnh theo SKU từ file JSON được export từ CSV.
+ */
+function noithat_pro_get_sku_image_map() {
+    static $images_by_sku = null;
+
+    if (null !== $images_by_sku) {
+        return $images_by_sku;
+    }
+
+    $images_by_sku = array();
+    $map_file = get_stylesheet_directory() . '/assets/data/sku-image-map.json';
+
+    if (!file_exists($map_file) || !is_readable($map_file)) {
+        return $images_by_sku;
+    }
+
+    $raw = file_get_contents($map_file);
+    if (false === $raw || '' === trim($raw)) {
+        return $images_by_sku;
+    }
+
+    $payload = json_decode($raw, true);
+    if (
+        is_array($payload)
+        && isset($payload['imagesBySku'])
+        && is_array($payload['imagesBySku'])
+    ) {
+        foreach ($payload['imagesBySku'] as $sku => $url) {
+            $normalized_sku = strtoupper(trim((string) $sku));
+            $normalized_url = trim((string) $url);
+            if ('' === $normalized_sku || !wp_http_validate_url($normalized_url)) {
+                continue;
+            }
+
+            $images_by_sku[$normalized_sku] = $normalized_url;
+        }
+    }
+
+    return $images_by_sku;
+}
+
+/**
+ * Fallback built-in theo SKU để vẫn hiện ảnh thật khi file map JSON bị thiếu.
+ */
+function noithat_pro_get_builtin_image_url_by_sku($sku) {
+    $sku = strtoupper(trim((string) $sku));
+    if (!preg_match('/^NTP-([A-Z]{2})(\d{3})$/', $sku, $matches)) {
+        return '';
+    }
+
+    $group = $matches[1];
+    $index = max(0, (intval($matches[2]) - 1) % 6);
+
+    $pool = array(
+        'SF' => array(
+            'https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1484101403633-562f891dc89a?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80',
+        ),
+        'BA' => array(
+            'https://images.unsplash.com/photo-1519710884006-4d4f6494f0d7?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1549187774-b4e9b0445b41?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1586105251261-72a756497a12?auto=format&fit=crop&w=1200&q=80',
+        ),
+        'GH' => array(
+            'https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1616627451902-6fa33f9c5b79?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1551298370-9d3d53740c72?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1601396974228-7ad4dff65136?auto=format&fit=crop&w=1200&q=80',
+        ),
+        'TK' => array(
+            'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1616594039964-3f5f6c5f67df?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1578898887932-dce23a595ad4?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1597074866923-dc0589150358?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1582582429416-97d2f9f5a93c?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1200&q=80',
+        ),
+        'GN' => array(
+            'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1616596871468-6f4d30fbd8b4?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1616628182509-6f3cb0f5d2fc?auto=format&fit=crop&w=1200&q=80',
+        ),
+    );
+
+    if (!isset($pool[$group]) || !isset($pool[$group][$index])) {
+        return '';
+    }
+
+    return $pool[$group][$index];
+}
+
+/**
+ * Lấy URL ảnh external từ map JSON theo SKU sản phẩm.
+ */
+function noithat_pro_get_external_image_url_by_product($post_id) {
+    $sku = '';
+    if (function_exists('wc_get_product')) {
+        $product = wc_get_product($post_id);
+        if ($product && is_a($product, 'WC_Product')) {
+            $sku = $product->get_sku();
+        }
+    }
+
+    if (empty($sku)) {
+        $sku = get_post_meta($post_id, '_sku', true);
+    }
+
+    $sku = strtoupper(trim((string) $sku));
+    if ('' === $sku) {
+        return '';
+    }
+
+    $map = noithat_pro_get_sku_image_map();
+    if (isset($map[$sku])) {
+        $url = trim((string) $map[$sku]);
+        if (wp_http_validate_url($url)) {
+            return $url;
+        }
+    }
+
+    $built_in_url = noithat_pro_get_builtin_image_url_by_sku($sku);
+    if (wp_http_validate_url($built_in_url)) {
+        return $built_in_url;
+    }
+
+    return '';
+}
+
+/**
+ * Render thẻ img an toàn từ URL.
+ */
+function noithat_pro_build_image_tag($url, $attributes = array()) {
+    if (!is_array($attributes)) {
+        $attributes = array();
+    }
+
+    $attributes = array_merge(
+        array(
+            'loading' => 'lazy',
+            'alt'     => '',
+        ),
+        $attributes
+    );
+
+    if (isset($attributes['class']) && is_array($attributes['class'])) {
+        $attributes['class'] = implode(' ', array_filter($attributes['class']));
+    }
+
+    $attributes['src'] = $url;
+
+    $parts = array();
+    foreach ($attributes as $key => $value) {
+        if (null === $value || '' === $value) {
+            continue;
+        }
+
+        $parts[] = esc_attr($key) . '="' . esc_attr((string) $value) . '"';
+    }
+
+    return '<img ' . implode(' ', $parts) . '>';
+}
+
+/**
+ * Fallback ảnh WooCommerce từ map SKU khi chưa có thumbnail attachment.
+ */
+function noithat_pro_woocommerce_product_image_fallback($image, $product, $size, $attr, $placeholder) {
+    if (!$product || !is_a($product, 'WC_Product')) {
+        return $image;
+    }
+
+    if ($product->get_image_id()) {
+        return $image;
+    }
+
+    $external_url = noithat_pro_get_external_image_url_by_product($product->get_id());
+    if (empty($external_url)) {
+        return $image;
+    }
+
+    $attributes = array(
+        'alt'     => $product->get_name(),
+        'loading' => 'lazy',
+    );
+
+    if (is_array($attr)) {
+        $attributes = array_merge($attributes, $attr);
+    }
+
+    return noithat_pro_build_image_tag($external_url, $attributes);
+}
+add_filter('woocommerce_product_get_image', 'noithat_pro_woocommerce_product_image_fallback', 10, 5);
+
+/**
+ * Trả về HTML ảnh sản phẩm với fallback an toàn khi chưa có thumbnail.
+ */
+function noithat_pro_get_product_image_html($post_id, $size = 'np-product-thumb', $attributes = array()) {
+    if (has_post_thumbnail($post_id)) {
+        return get_the_post_thumbnail($post_id, $size, $attributes);
+    }
+
+    $default_attributes = array(
+        'loading' => 'lazy',
+        'class'   => 'np-product-fallback-image',
+        'alt'     => get_the_title($post_id),
+    );
+    $attributes = array_merge($default_attributes, $attributes);
+
+    $external_url = noithat_pro_get_external_image_url_by_product($post_id);
+    if (!empty($external_url)) {
+        return noithat_pro_build_image_tag($external_url, $attributes);
+    }
+
+    if (function_exists('wc_placeholder_img')) {
+        return wc_placeholder_img($size, $attributes);
+    }
+
+    return '<img src="' . esc_url(noithat_pro_get_product_placeholder_url()) . '" alt="' . esc_attr(get_the_title($post_id)) . '" loading="lazy">';
+}
 
 
 // ============================================================================
@@ -227,11 +475,9 @@ function noithat_pro_featured_products_shortcode($atts) {
         ?>
         <div class="np-product-card np-animate">
             <div class="np-product-img-wrap">
-                <?php if (has_post_thumbnail()) : ?>
-                    <a href="<?php the_permalink(); ?>">
-                        <?php the_post_thumbnail('np-product-thumb'); ?>
-                    </a>
-                <?php endif; ?>
+                <a href="<?php the_permalink(); ?>">
+                    <?php echo noithat_pro_get_product_image_html(get_the_ID(), 'np-product-thumb'); ?>
+                </a>
                 
                 <?php if ($product->is_on_sale()) : ?>
                     <span class="np-product-badge np-badge-sale">Giảm giá</span>
@@ -306,11 +552,9 @@ function noithat_pro_new_products_shortcode($atts) {
         ?>
         <div class="np-product-card np-animate">
             <div class="np-product-img-wrap">
-                <?php if (has_post_thumbnail()) : ?>
-                    <a href="<?php the_permalink(); ?>">
-                        <?php the_post_thumbnail('np-product-thumb'); ?>
-                    </a>
-                <?php endif; ?>
+                <a href="<?php the_permalink(); ?>">
+                    <?php echo noithat_pro_get_product_image_html(get_the_ID(), 'np-product-thumb'); ?>
+                </a>
                 <span class="np-product-badge np-badge-new">Mới</span>
             </div>
             <div class="np-product-info">

@@ -70,11 +70,21 @@ class NoiThat_Bestseller_Widget extends WP_Widget {
                 global $product;
                 ?>
                 <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--np-border-light,#f0f0f0);">
-                    <?php if (has_post_thumbnail()) : ?>
                     <a href="<?php the_permalink(); ?>" style="width:60px;height:60px;flex-shrink:0;border-radius:8px;overflow:hidden;">
-                        <?php the_post_thumbnail('thumbnail', array('style' => 'width:100%;height:100%;object-fit:cover;')); ?>
+                        <?php
+                        if (function_exists('noithat_pro_get_product_image_html')) {
+                            echo noithat_pro_get_product_image_html(
+                                get_the_ID(),
+                                'thumbnail',
+                                array('style' => 'width:100%;height:100%;object-fit:cover;')
+                            );
+                        } elseif (has_post_thumbnail()) {
+                            the_post_thumbnail('thumbnail', array('style' => 'width:100%;height:100%;object-fit:cover;'));
+                        } elseif (function_exists('wc_placeholder_img')) {
+                            echo wc_placeholder_img('thumbnail', array('style' => 'width:100%;height:100%;object-fit:cover;'));
+                        }
+                        ?>
                     </a>
-                    <?php endif; ?>
                     <div style="flex:1;min-width:0;">
                         <a href="<?php the_permalink(); ?>" style="font-size:0.9rem;font-weight:600;color:inherit;display:block;margin-bottom:4px;">
                             <?php the_title(); ?>
