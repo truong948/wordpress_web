@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" role="img" aria-labelledby="title desc">
+  <title id="title">NoiThat Pro Product Placeholder</title>
+  <desc id="desc">Fallback image shown when product image import fails on deploy.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4efe4"/>
+      <stop offset="100%" stop-color="#e6dcc8"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#f8f5ee" stop-opacity="0.95"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="1200" fill="url(#bg)"/>
+  <circle cx="180" cy="180" r="120" fill="#d6c7a8" opacity="0.45"/>
+  <circle cx="1020" cy="260" r="160" fill="#d6c7a8" opacity="0.35"/>
+  <circle cx="960" cy="1000" r="220" fill="#c8b08a" opacity="0.22"/>
+
+  <rect x="180" y="220" rx="56" ry="56" width="840" height="760" fill="url(#card)" stroke="#c4ad86" stroke-width="6"/>
+
+  <g transform="translate(0,20)">
+    <rect x="465" y="395" width="270" height="170" rx="20" fill="#8b6914" opacity="0.2"/>
+    <rect x="420" y="520" width="360" height="140" rx="28" fill="#8b6914" opacity="0.28"/>
+    <rect x="420" y="650" width="34" height="70" rx="10" fill="#8b6914" opacity="0.26"/>
+    <rect x="746" y="650" width="34" height="70" rx="10" fill="#8b6914" opacity="0.26"/>
+  </g>
+
+  <text x="600" y="810" text-anchor="middle" font-family="Georgia, serif" font-size="60" fill="#6f5522" letter-spacing="1">
+    NoiThat Pro
+  </text>
+  <text x="600" y="872" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" fill="#8f7542" letter-spacing="2">
+    IMAGE LOADING FALLBACK
+  </text>
+</svg>

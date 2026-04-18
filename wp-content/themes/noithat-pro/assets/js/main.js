@@ -186,6 +186,34 @@
     });
 
     // ========================================================================
+    // 7.1 PRODUCT IMAGE FALLBACK (khi ảnh URL ngoài lỗi tải)
+    // ========================================================================
+    const fallbackImage = (typeof noithatProData !== 'undefined' && noithatProData.placeholderImage)
+        ? noithatProData.placeholderImage
+        : '';
+
+    if (fallbackImage) {
+        const loopImages = document.querySelectorAll('.woocommerce ul.products li.product img, .np-product-img-wrap img');
+
+        loopImages.forEach(function(img) {
+            const applyFallback = function() {
+                if (img.dataset.npFallbackApplied === '1') return;
+                img.dataset.npFallbackApplied = '1';
+                img.src = fallbackImage;
+                img.removeAttribute('srcset');
+                img.removeAttribute('sizes');
+            };
+
+            img.addEventListener('error', applyFallback);
+
+            // Trường hợp ảnh đã lỗi trước khi listener được gắn
+            if (img.complete && img.naturalWidth === 0) {
+                applyFallback();
+            }
+        });
+    }
+
+    // ========================================================================
     // 8. COUNTER ANIMATION (cho hero stats)
     // Đếm số từ 0 đến giá trị thực
     // ========================================================================
