@@ -13,6 +13,9 @@ $phone   = get_option('np_phone', '0987 654 321');
 $email   = get_option('np_email', 'info@noithatpro.vn');
 $address = get_option('np_address', '123 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh');
 $facebook = get_option('np_facebook', '#');
+$np_shop_url = function_exists('noithat_pro_get_shop_url')
+    ? noithat_pro_get_shop_url()
+    : home_url('/shop/');
 ?>
 
 </main><!-- #np-main-content -->
@@ -51,11 +54,12 @@ $facebook = get_option('np_facebook', '#');
             <div class="np-footer-col">
                 <h4 class="np-footer-title">Danh Mục</h4>
                 <ul class="np-footer-links">
-                    <li><a href="<?php echo esc_url(home_url('/product-category/sofa')); ?>">Sofa & Ghế Sofa</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/product-category/ban')); ?>">Bàn Ăn & Bàn Làm Việc</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/product-category/ghe')); ?>">Ghế Ăn & Ghế Văn Phòng</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/product-category/tu-ke')); ?>">Tủ & Kệ Trang Trí</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/product-category/giuong')); ?>">Giường & Nệm</a></li>
+                    <li><a href="<?php echo esc_url(noithat_pro_get_product_category_url('sofa')); ?>">Sofa & Ghế Sofa</a></li>
+                    <li><a href="<?php echo esc_url(noithat_pro_get_product_category_url('ban')); ?>">Bàn Ăn & Bàn Làm Việc</a></li>
+                    <li><a href="<?php echo esc_url(noithat_pro_get_product_category_url('ghe')); ?>">Ghế Ăn & Ghế Văn Phòng</a></li>
+                    <li><a href="<?php echo esc_url(noithat_pro_get_product_category_url('tu-ke')); ?>">Tủ & Kệ Trang Trí</a></li>
+                    <li><a href="<?php echo esc_url(noithat_pro_get_product_category_url('giuong')); ?>">Giường & Nệm</a></li>
+                    <li><a href="<?php echo esc_url($np_shop_url); ?>">Xem toàn bộ cửa hàng</a></li>
                 </ul>
             </div>
             

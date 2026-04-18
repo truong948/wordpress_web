@@ -253,11 +253,11 @@
 
     // ========================================================================
     // 11. CONTACT FORM FALLBACK HANDLER
-    // Xử lý form liên hệ khi không có Contact Form 7
+    // Chỉ dùng cho bản demo; production submit backend sẽ không bị chặn
     // ========================================================================
     var contactForm = document.getElementById('np-contact-form');
     
-    if (contactForm) {
+    if (contactForm && contactForm.dataset.demoSubmit === '1') {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             var submitBtn = contactForm.querySelector('button[type="submit"]');
@@ -291,13 +291,6 @@
         btn.innerHTML = '<i class="fas fa-check"></i> Đã thêm!';
         btn.style.background = '#4CAF50';
         btn.style.color = 'white';
-        
-        var countEl = document.querySelector('.np-cart-count');
-        if (countEl) {
-            countEl.textContent = parseInt(countEl.textContent || 0) + 1;
-            countEl.style.transform = 'scale(1.3)';
-            setTimeout(function() { countEl.style.transform = 'scale(1)'; }, 300);
-        }
         
         setTimeout(function() {
             btn.innerHTML = origHTML;

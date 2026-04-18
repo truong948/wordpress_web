@@ -7,6 +7,16 @@
  * 
  * @package NoiThat_Pro
  */
+
+$np_shop_url = function_exists('noithat_pro_get_shop_url')
+    ? noithat_pro_get_shop_url()
+    : home_url('/shop/');
+
+$np_account_url = function_exists('noithat_pro_get_account_page_url')
+    ? noithat_pro_get_account_page_url()
+    : wp_login_url();
+
+$np_logout_url = wp_logout_url(home_url('/'));
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -61,10 +71,10 @@
                 ?>
                 <ul>
                     <li class="current-menu-item"><a href="<?php echo esc_url(home_url('/')); ?>">Trang Chủ</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/shop')); ?>">Cửa Hàng</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/product-category/sofa')); ?>">Sofa</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/product-category/ban')); ?>">Bàn</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/product-category/ghe')); ?>">Ghế</a></li>
+                    <li><a href="<?php echo esc_url($np_shop_url); ?>">Cửa Hàng</a></li>
+                    <li><a href="<?php echo esc_url(noithat_pro_get_product_category_url('sofa')); ?>">Sofa</a></li>
+                    <li><a href="<?php echo esc_url(noithat_pro_get_product_category_url('ban')); ?>">Bàn</a></li>
+                    <li><a href="<?php echo esc_url(noithat_pro_get_product_category_url('ghe')); ?>">Ghế</a></li>
                     <li><a href="<?php echo esc_url(home_url('/gioi-thieu')); ?>">Giới Thiệu</a></li>
                     <li><a href="<?php echo esc_url(home_url('/lien-he')); ?>">Liên Hệ</a></li>
                 </ul>
@@ -79,6 +89,25 @@
             <button class="np-header-btn np-search-toggle" id="np-search-btn" aria-label="Tìm kiếm">
                 <i class="fas fa-search"></i>
             </button>
+
+            <?php if (is_user_logged_in()) : ?>
+                <?php if (current_user_can('manage_options')) : ?>
+                <a href="<?php echo esc_url(admin_url()); ?>" class="np-header-btn" aria-label="Trang quản trị" title="Trang quản trị">
+                    <i class="fas fa-user-shield"></i>
+                </a>
+                <?php else : ?>
+                <a href="<?php echo esc_url($np_account_url); ?>" class="np-header-btn" aria-label="Tài khoản" title="Tài khoản">
+                    <i class="fas fa-user"></i>
+                </a>
+                <?php endif; ?>
+                <a href="<?php echo esc_url($np_logout_url); ?>" class="np-header-btn" aria-label="Đăng xuất" title="Đăng xuất">
+                    <i class="fas fa-right-from-bracket"></i>
+                </a>
+            <?php else : ?>
+            <a href="<?php echo esc_url($np_account_url); ?>" class="np-header-btn" aria-label="Đăng nhập" title="Đăng nhập">
+                <i class="fas fa-right-to-bracket"></i>
+            </a>
+            <?php endif; ?>
             
             <!-- Nút giỏ hàng -->
             <?php if (function_exists('WC')) : ?>

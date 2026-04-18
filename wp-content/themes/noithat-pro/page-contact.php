@@ -12,6 +12,7 @@ get_header();
 $phone   = get_option('np_phone', '0987 654 321');
 $email   = get_option('np_email', 'info@noithatpro.vn');
 $address = get_option('np_address', '123 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh');
+$contact_status = isset($_GET['np_contact']) ? sanitize_key(wp_unslash($_GET['np_contact'])) : '';
 ?>
 
 <!-- Page Header -->
@@ -31,16 +32,35 @@ $address = get_option('np_address', '123 Nguyễn Huệ, Quận 1, TP. Hồ Chí
             <!-- Bên trái: Form liên hệ -->
             <div class="np-contact-form-wrapper np-animate">
                 <h2><i class="fas fa-paper-plane" style="color:var(--np-primary);margin-right:8px;"></i> Gửi Tin Nhắn</h2>
+
+                <?php if ('success' === $contact_status) : ?>
+                <div style="padding:12px 14px;background:#E8F5E9;border:1px solid #C8E6C9;color:#1B5E20;border-radius:8px;margin-bottom:1rem;">
+                    Gửi liên hệ thành công. Chúng tôi sẽ phản hồi sớm nhất.
+                </div>
+                <?php elseif ('error' === $contact_status) : ?>
+                <div style="padding:12px 14px;background:#FFEBEE;border:1px solid #FFCDD2;color:#B71C1C;border-radius:8px;margin-bottom:1rem;">
+                    Không thể gửi liên hệ lúc này. Vui lòng thử lại sau.
+                </div>
+                <?php elseif ('invalid' === $contact_status) : ?>
+                <div style="padding:12px 14px;background:#FFF8E1;border:1px solid #FFECB3;color:#8A6D3B;border-radius:8px;margin-bottom:1rem;">
+                    Vui lòng nhập đầy đủ họ tên, email hợp lệ và nội dung tin nhắn.
+                </div>
+                <?php endif; ?>
                 
                 <?php
-                // Nếu có Contact Form 7 thì dùng shortcode
-                if (shortcode_exists('contact-form-7')) {
-                    // ID form tùy theo cài đặt thực tế
-                    echo do_shortcode('[contact-form-7 id="1" title="Form Liên Hệ"]');
+                $cf7_shortcode = function_exists('noithat_pro_get_cf7_shortcode')
+                    ? noithat_pro_get_cf7_shortcode()
+                    : '';
+
+                // Nếu có Contact Form 7 và có form publish thì render form thật.
+                if (!empty($cf7_shortcode)) {
+                    echo do_shortcode($cf7_shortcode);
                 } else {
-                    // Form HTML fallback
+                    // Form HTML fallback có submit backend thật.
                 ?>
-                <form method="post" action="#" id="np-contact-form" class="np-contact-form">
+                <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" id="np-contact-form" class="np-contact-form">
+                    <input type="hidden" name="action" value="np_contact_submit">
+                    <?php wp_nonce_field('np_contact_submit', 'np_contact_nonce'); ?>
                     <div class="np-contact-form-row">
                         <input type="text" name="name" placeholder="Họ và tên *" required
                                id="np-contact-name">

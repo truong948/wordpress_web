@@ -610,6 +610,52 @@
     gap: 1rem;
 }
 
+/* --- ACCOUNT PAGE / LOGIN FORM --- */
+#np-loginform {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+#np-loginform label {
+    font-weight: 600;
+    color: var(--np-text-primary);
+}
+#np-loginform input[type="text"],
+#np-loginform input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--np-border);
+    border-radius: var(--np-radius-sm);
+    font-family: var(--np-font-body);
+    margin-top: 6px;
+}
+#np-loginform input[type="text"]:focus,
+#np-loginform input[type="password"]:focus {
+    outline: none;
+    border-color: var(--np-primary);
+    box-shadow: 0 0 0 3px rgba(139,105,20,0.1);
+}
+#np-loginform .login-remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+}
+#np-loginform .login-submit input[type="submit"] {
+    border: none;
+    border-radius: var(--np-radius-sm);
+    background: linear-gradient(135deg, var(--np-primary), var(--np-accent));
+    color: #fff;
+    font-weight: 600;
+    padding: 12px 18px;
+    cursor: pointer;
+    transition: var(--np-transition);
+}
+#np-loginform .login-submit input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(139,105,20,0.35);
+}
+
 /* --- BREADCRUMB --- */
 .np-breadcrumb {
     padding: 1rem 0;

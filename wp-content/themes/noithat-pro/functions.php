@@ -371,7 +371,9 @@ function noithat_pro_categories_shortcode($atts) {
             $thumbnail_id = get_term_meta($cat->term_id, 'thumbnail_id', true);
             $image_url = $thumbnail_id 
                 ? wp_get_attachment_url($thumbnail_id) 
-                : get_stylesheet_directory_uri() . '/assets/images/placeholder.jpg';
+                : (function_exists('wc_placeholder_img_src')
+                    ? wc_placeholder_img_src('woocommerce_single')
+                    : 'https://via.placeholder.com/600x600?text=NoiThat+Pro');
             $cat_link = get_term_link($cat);
         ?>
         <a href="<?php echo esc_url($cat_link); ?>" class="np-cat-card np-animate">
@@ -693,7 +695,7 @@ add_filter('the_generator', 'noithat_pro_remove_version');
  * Giới hạn số lần đăng nhập sai
  */
 function noithat_pro_login_check($user, $password) {
-    $ip = $_SERVER['REMOTE_ADDR'];
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
     $transient_key = 'login_attempts_' . md5($ip);
     $attempts = get_transient($transient_key);
     
@@ -712,7 +714,7 @@ add_filter('authenticate', 'noithat_pro_login_check', 30, 2);
  * Đếm số lần đăng nhập sai
  */
 function noithat_pro_login_failed($username) {
-    $ip = $_SERVER['REMOTE_ADDR'];
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
     $transient_key = 'login_attempts_' . md5($ip);
     $attempts = get_transient($transient_key);
     
@@ -723,3 +725,259 @@ function noithat_pro_login_failed($username) {
     }
 }
 add_action('wp_login_failed', 'noithat_pro_login_failed');
+
+
+// ============================================================================
+// 10. DEPLOY STABILITY HELPERS
+// Cố định danh mục, link category, và rewrite để tránh 404 sau deploy/import
+// ============================================================================
+
+/**
+ * URL trang cửa hàng, fallback an toàn khi WooCommerce chưa sẵn sàng.
+ */
+function noithat_pro_get_shop_url() {
+    if (function_exists('wc_get_page_permalink')) {
+        $shop_url = wc_get_page_permalink('shop');
+        if (!empty($shop_url) && '#' !== $shop_url) {
+            return $shop_url;
+        }
+    }
+
+    return home_url('/shop/');
+}
+
+/**
+ * Trả về URL danh mục sản phẩm theo slug, fallback về trang shop nếu không tồn tại.
+ */
+function noithat_pro_get_product_category_url($slug) {
+    if (!taxonomy_exists('product_cat')) {
+        return noithat_pro_get_shop_url();
+    }
+
+    $term = get_term_by('slug', sanitize_title($slug), 'product_cat');
+    if ($term && !is_wp_error($term)) {
+        $link = get_term_link($term);
+        if (!is_wp_error($link)) {
+            return $link;
+        }
+    }
+
+    return noithat_pro_get_shop_url();
+}
+
+/**
+ * Tạo sẵn các slug danh mục thường dùng để menu không bị 404.
+ */
+function noithat_pro_seed_product_categories() {
+    if (!taxonomy_exists('product_cat')) {
+        return;
+    }
+
+    $seed_version = '1.0.0';
+    if (get_option('np_seed_product_categories_version') === $seed_version) {
+        return;
+    }
+
+    $default_categories = array(
+        'sofa'   => 'Sofa',
+        'ban'    => 'Ban',
+        'ghe'    => 'Ghe',
+        'tu-ke'  => 'Tu & Ke',
+        'giuong' => 'Giuong & Nem',
+    );
+
+    foreach ($default_categories as $slug => $name) {
+        if (!get_term_by('slug', $slug, 'product_cat')) {
+            wp_insert_term($name, 'product_cat', array('slug' => $slug));
+        }
+    }
+
+    update_option('np_seed_product_categories_version', $seed_version);
+}
+add_action('init', 'noithat_pro_seed_product_categories', 25);
+
+/**
+ * Redirect tự động các URL category phổ biến khi gặp 404 do lệch slug.
+ */
+function noithat_pro_redirect_legacy_product_category_404() {
+    if (!is_404()) {
+        return;
+    }
+
+    if (empty($_SERVER['REQUEST_URI'])) {
+        return;
+    }
+
+    $request_path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+    if (0 !== strpos($request_path, 'product-category/')) {
+        return;
+    }
+
+    $broken_slug = trim(substr($request_path, strlen('product-category/')), '/');
+    if (empty($broken_slug)) {
+        return;
+    }
+
+    $slug_map = array(
+        'sofa'   => array('sofa', 'sofa-ghe-sofa'),
+        'ban'    => array('ban', 'ban-an-ban-lam-viec'),
+        'ghe'    => array('ghe', 'ghe-an-ghe-van-phong'),
+        'tu-ke'  => array('tu-ke', 'tu-ke-trang-tri'),
+        'giuong' => array('giuong', 'giuong-nem'),
+    );
+
+    if (!isset($slug_map[$broken_slug])) {
+        return;
+    }
+
+    foreach ($slug_map[$broken_slug] as $candidate_slug) {
+        $term = get_term_by('slug', $candidate_slug, 'product_cat');
+        if ($term && !is_wp_error($term)) {
+            $target = get_term_link($term);
+            if (!is_wp_error($target)) {
+                wp_safe_redirect($target, 301);
+                exit;
+            }
+        }
+    }
+}
+add_action('template_redirect', 'noithat_pro_redirect_legacy_product_category_404');
+
+
+// ============================================================================
+// 11. CONTACT FORM RELIABILITY
+// Tự động tìm form CF7 hợp lệ và fallback gửi email thật khi không có CF7
+// ============================================================================
+
+/**
+ * Lấy shortcode Contact Form 7 hợp lệ (form đầu tiên), tránh hard-code ID.
+ */
+function noithat_pro_get_cf7_shortcode() {
+    if (!shortcode_exists('contact-form-7')) {
+        return '';
+    }
+
+    $forms = get_posts(array(
+        'post_type'      => 'wpcf7_contact_form',
+        'post_status'    => 'publish',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+    ));
+
+    if (empty($forms)) {
+        return '';
+    }
+
+    return '[contact-form-7 id="' . intval($forms[0]) . '"]';
+}
+
+/**
+ * Xử lý form liên hệ fallback (không dùng CF7).
+ */
+function noithat_pro_handle_contact_submit() {
+    if (
+        !isset($_POST['np_contact_nonce']) ||
+        !wp_verify_nonce($_POST['np_contact_nonce'], 'np_contact_submit')
+    ) {
+        wp_die(__('Yeu cau khong hop le.', 'noithat-pro'));
+    }
+
+    $name    = sanitize_text_field($_POST['name'] ?? '');
+    $email   = sanitize_email($_POST['email'] ?? '');
+    $phone   = sanitize_text_field($_POST['phone'] ?? '');
+    $subject = sanitize_text_field($_POST['subject'] ?? 'Lien he tu website NoiThat Pro');
+    $message = sanitize_textarea_field($_POST['message'] ?? '');
+
+    $referer = wp_get_referer() ?: home_url('/lien-he/');
+
+    if (empty($name) || empty($email) || empty($message) || !is_email($email)) {
+        wp_safe_redirect(add_query_arg('np_contact', 'invalid', $referer));
+        exit;
+    }
+
+    $to = get_option('admin_email');
+    $mail_subject = '[NoiThat Pro] ' . $subject;
+    $mail_body = "Ho ten: {$name}\n"
+        . "Email: {$email}\n"
+        . "Dien thoai: {$phone}\n\n"
+        . "Noi dung:\n{$message}";
+    $headers = array('Reply-To: ' . $name . ' <' . $email . '>');
+
+    $sent = wp_mail($to, $mail_subject, $mail_body, $headers);
+
+    wp_safe_redirect(add_query_arg('np_contact', $sent ? 'success' : 'error', $referer));
+    exit;
+}
+add_action('admin_post_np_contact_submit', 'noithat_pro_handle_contact_submit');
+add_action('admin_post_nopriv_np_contact_submit', 'noithat_pro_handle_contact_submit');
+
+
+// ============================================================================
+// 12. AUTH + ROLE PERMISSIONS
+// Phân quyền admin/user, login redirect, logout và hạn chế wp-admin cho user
+// ============================================================================
+
+/**
+ * URL trang tai khoan: uu tien WooCommerce My Account, fallback wp-login.
+ */
+function noithat_pro_get_account_page_url() {
+    $custom_account_page = get_page_by_path('tai-khoan');
+    if ($custom_account_page instanceof WP_Post) {
+        return get_permalink($custom_account_page);
+    }
+
+    if (function_exists('wc_get_page_permalink')) {
+        $account_url = wc_get_page_permalink('myaccount');
+        if (!empty($account_url) && '#' !== $account_url) {
+            return $account_url;
+        }
+    }
+
+    return wp_login_url();
+}
+
+/**
+ * Redirect theo role sau khi login.
+ */
+function noithat_pro_login_redirect($redirect_to, $requested_redirect_to, $user) {
+    if (!$user instanceof WP_User) {
+        return $redirect_to;
+    }
+
+    if (in_array('administrator', (array) $user->roles, true)) {
+        return admin_url();
+    }
+
+    return noithat_pro_get_account_page_url();
+}
+add_filter('login_redirect', 'noithat_pro_login_redirect', 10, 3);
+
+/**
+ * Chan user khong phai admin truy cap wp-admin (tru AJAX).
+ */
+function noithat_pro_restrict_wp_admin_for_non_admin() {
+    if (!is_user_logged_in() || current_user_can('manage_options') || wp_doing_ajax()) {
+        return;
+    }
+
+    $pagenow = $GLOBALS['pagenow'] ?? '';
+    if (in_array($pagenow, array('profile.php', 'admin-ajax.php', 'async-upload.php'), true)) {
+        return;
+    }
+
+    wp_safe_redirect(home_url('/'));
+    exit;
+}
+add_action('admin_init', 'noithat_pro_restrict_wp_admin_for_non_admin');
+
+/**
+ * An admin bar voi role user de giao dien gon hon.
+ */
+function noithat_pro_hide_admin_bar_for_users($show_admin_bar) {
+    if (current_user_can('manage_options')) {
+        return $show_admin_bar;
+    }
+
+    return false;
+}
+add_filter('show_admin_bar', 'noithat_pro_hide_admin_bar_for_users');
